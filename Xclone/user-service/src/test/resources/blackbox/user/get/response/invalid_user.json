@@ -1,0 +1,11 @@
+{
+  "errorId": "XCLONE_API_ERROR_INVALID_REQUEST",
+  "message": "Invalid request - user service",
+  "details": [
+    {
+      "field": "userID",
+      "location": "query",
+      "issue": "Can not find user with id 96751bae-00d0-4b73-b59f-4ffa8112e321"
+    }
+  ]
+}
