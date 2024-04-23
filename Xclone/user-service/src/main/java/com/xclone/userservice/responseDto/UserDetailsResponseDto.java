@@ -52,7 +52,7 @@ public class UserDetailsResponseDto {
     @JsonProperty("updatedBy")
     private String updatedBy;
 
-    public static UserDetailsResponseDto convertToUserDetailsResponseDto(User user){
+    public static UserDetailsResponseDto convertToUserDetailsResponseDto(User user) {
         return UserDetailsResponseDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())

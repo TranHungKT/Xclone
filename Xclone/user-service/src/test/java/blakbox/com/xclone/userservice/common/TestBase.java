@@ -11,11 +11,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,5 +50,12 @@ public class TestBase {
         RequestSpecification specification = getSpecificationBuilder(new HashMap<>()).build();
 
         return RestAssured.given().spec(specification).get(String.format(CommonTestData.GET_USER_DETAILS, userId));
+    }
+
+    protected void runScriptFromResource(String fileName) throws SQLException {
+        String resourcePath = String.format(fileName);
+        try (Connection conn = dataSource.getConnection()){
+            ScriptUtils.executeSqlScript(conn, new ClassPathResource(resourcePath));
+        }
     }
 }

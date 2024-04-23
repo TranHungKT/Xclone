@@ -6,7 +6,6 @@
 		<groupId>com.xclone</groupId>
 		<artifactId>Xclone</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>user-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>

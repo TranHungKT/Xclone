@@ -51,8 +51,8 @@ public class ApiErrorHandler {
         return ApiError.builder()
                 .errorId(exception.getClass().getSimpleName())
                 .message(exception.getMessage())
-                .details(exception.getCause() == null ? null :
-                        List.of(
+                .details(exception.getCause() == null ? null
+                                : List.of(
                                 ApiErrorDetails.builder()
                                         .issue(exception.getCause().getMessage())
                                         .location(ERROR_LOCATION_BODY)

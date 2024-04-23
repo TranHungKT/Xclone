@@ -26,7 +26,7 @@ public class BaseEntity {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdDt;
 
-    @Length(max=50)
+    @Length(max = 50)
     private String updatedBy;
 
     @UpdateTimestamp
