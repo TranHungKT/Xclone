@@ -21,4 +21,14 @@ public final class ErrorHelper {
         );
     }
 
+    public static BadRequestException buildBadRequestException(String fieldName, String issue) {
+        return new BadRequestException(
+                Collections.singletonList(ApiErrorDetails.builder()
+                        .field(fieldName)
+                        .issue(issue)
+                        .location(ERROR_LOCATION)
+                        .build())
+        );
+    }
+
 }
