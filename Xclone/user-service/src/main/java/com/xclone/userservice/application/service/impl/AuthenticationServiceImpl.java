@@ -15,9 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Random;
-
-
 @RequiredArgsConstructor
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -25,21 +22,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+
     @Override
-    public LoginResponseDto login(AuthenticationRequest request){
+    public LoginResponseDto login(AuthenticationRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
-        var user = userRepository.findUserByEmail(request.getEmail())
-                .orElseThrow(() -> ErrorHelper.buildBadRequestException("Authentication", "Email or password is wrong"));
-
-        return LoginResponseDto.convertToLoginResponseDto(jwtService.generateToken(user));
+        return LoginResponseDto.convertToLoginResponseDto(jwtService.generateToken(request.getEmail()));
     }
 
     @Override
     @Transactional
-    public void registration(RegistrationRequest request){
-        if(userRepository.existsUserByEmail(request.getEmail())){
-           throw ErrorHelper.buildBadRequestException("Authentication", "Email already exists");
+    public void registration(RegistrationRequest request) {
+        if (userRepository.existsUserByEmail(request.getEmail())) {
+            throw ErrorHelper.buildBadRequestException("Authentication", "Email already exists");
         }
 
         User user = User.from(request, passwordEncoder);

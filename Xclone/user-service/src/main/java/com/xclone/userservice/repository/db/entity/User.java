@@ -50,13 +50,14 @@ public class User extends BaseEntity {
     private String passwordResetCode;
     private String role;
 
-    public static User from(@NonNull RegistrationRequest request, PasswordEncoder passwordEncoder){
+    public static User from(@NonNull RegistrationRequest request, PasswordEncoder passwordEncoder) {
         return User.builder()
                 .id(UUID.randomUUID())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .createdBy(request.getFullName())
                 .fullName(request.getFullName())
+                .role("USER_ROLE")
                 .build();
     }
 }

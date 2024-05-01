@@ -2,6 +2,7 @@ package com.xclone.userservice.configuration.security;
 
 import com.xclone.userservice.repository.db.dao.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,12 +15,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserRepository userRepository;
+
+    @Value("${byPassed:false}")
+    private boolean byPassed;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -42,16 +47,17 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(request ->
-                        request
-                                .requestMatchers("/api/v1/auth/**").permitAll()
-                                .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .csrf(AbstractHttpConfigurer::disable)
-                .exceptionHandling((exceptionHandling) -> exceptionHandling
-                        .accessDeniedPage("/access-denied")
-                );
+        if (byPassed) {
+            httpSecurity.authorizeHttpRequests(request -> request.anyRequest().permitAll()).csrf(AbstractHttpConfigurer::disable);
+        } else {
+            httpSecurity.authorizeHttpRequests(request ->
+                            request
+                                    .requestMatchers("/api/v1/auth/**").permitAll()
+                                    .anyRequest().authenticated()
+                    )
+                    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                    .csrf(AbstractHttpConfigurer::disable);
+        }
         return httpSecurity.build();
     }
 }

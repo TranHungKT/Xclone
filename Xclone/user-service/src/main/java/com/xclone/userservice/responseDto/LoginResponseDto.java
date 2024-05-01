@@ -18,7 +18,7 @@ public class LoginResponseDto {
     @JsonProperty("token")
     private String token;
 
-    public static LoginResponseDto convertToLoginResponseDto(String token){
+    public static LoginResponseDto convertToLoginResponseDto(String token) {
         return LoginResponseDto.builder().token(token).build();
     }
 }

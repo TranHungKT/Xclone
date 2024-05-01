@@ -5,5 +5,5 @@ import com.xclone.userservice.responseDto.UserDetailsResponseDto;
 import java.util.UUID;
 
 public interface UserService {
-    public UserDetailsResponseDto getUserById(UUID id);
+    UserDetailsResponseDto getUserById(UUID id);
 }

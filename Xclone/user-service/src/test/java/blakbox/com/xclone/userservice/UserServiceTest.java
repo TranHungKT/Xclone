@@ -2,11 +2,8 @@ package blakbox.com.xclone.userservice;
 
 import blakbox.com.xclone.userservice.common.CommonTestData;
 import blakbox.com.xclone.userservice.common.TestBase;
-
-
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
