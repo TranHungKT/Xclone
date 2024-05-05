@@ -57,7 +57,9 @@ public class User extends BaseEntity {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .createdBy(request.getFullName())
                 .fullName(request.getFullName())
-                .role("USER_ROLE")
+                .role("USER")
+                .activationCode(UUID.randomUUID().toString())
+                .confirmed(false)
                 .build();
     }
 }
