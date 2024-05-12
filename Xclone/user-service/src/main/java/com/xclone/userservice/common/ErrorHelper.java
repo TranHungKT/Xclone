@@ -2,6 +2,7 @@ package com.xclone.userservice.common;
 
 import com.xclone.userservice.error.ApiErrorDetails;
 import com.xclone.userservice.error.BadRequestException;
+import jakarta.mail.MessagingException;
 import lombok.experimental.UtilityClass;
 
 import java.util.Collections;
@@ -29,6 +30,10 @@ public final class ErrorHelper {
                         .location(ERROR_LOCATION)
                         .build())
         );
+    }
+
+    public static MessagingException buildMessagingException(String issue) {
+        return new MessagingException(issue);
     }
 
 }

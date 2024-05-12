@@ -1,15 +1,16 @@
 package com.xclone.userservice.controller;
 
 import com.xclone.userservice.application.service.AuthenticationService;
+import com.xclone.userservice.requestDto.ActiveUserRequest;
 import com.xclone.userservice.requestDto.AuthenticationRequest;
+import com.xclone.userservice.requestDto.ForgotPasswordRequest;
 import com.xclone.userservice.requestDto.RegistrationRequest;
+import com.xclone.userservice.requestDto.ResetPasswordRequest;
 import com.xclone.userservice.responseDto.LoginResponseDto;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,11 +35,23 @@ public class AuthenticationController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/email/{email}/activate/{activateCode}")
-    public ResponseEntity<Void> activateUser(@PathVariable String email, @PathVariable String activateCode) throws MessagingException {
+    @PostMapping("/active-user")
+    public ResponseEntity<String> activateUser(@RequestBody ActiveUserRequest body) {
         // TODO: VALIDATION INPUT
-        authenticationService.activateUser(email, activateCode);
+        authenticationService.activateUser(body);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.ok("Active user success");
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest body) throws MessagingException {
+            authenticationService.forgotPassword(body.getEmail());
+            return ResponseEntity.ok("Reset password code is send to your E-mail");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> forgotPassword(@RequestBody ResetPasswordRequest body) {
+        authenticationService.resetPassword(body);
+        return ResponseEntity.ok("Reset password success");
     }
 }
