@@ -4,6 +4,7 @@ import com.xclone.userservice.error.ApiError;
 import com.xclone.userservice.error.ApiErrorDetails;
 import com.xclone.userservice.error.BadRequestException;
 import com.xclone.userservice.error.ServiceException;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,13 @@ public class ApiErrorHandler {
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ApiError> handleBadRequestException(Exception exception, HttpServletRequest request) {
+        return ResponseEntity
+                .badRequest()
+                .body(buildErrorResponse(exception, request, HttpStatus.BAD_REQUEST));
+    }
+
+    @ExceptionHandler(MessagingException.class)
+    public ResponseEntity<ApiError> handleMessagingException(Exception exception, HttpServletRequest request) {
         return ResponseEntity
                 .badRequest()
                 .body(buildErrorResponse(exception, request, HttpStatus.BAD_REQUEST));

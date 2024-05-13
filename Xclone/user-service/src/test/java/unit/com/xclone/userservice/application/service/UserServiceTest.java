@@ -1,6 +1,6 @@
 package unit.com.xclone.userservice.application.service;
 
-import com.xclone.userservice.application.service.UserService;
+import com.xclone.userservice.application.service.impl.UserServiceImpl;
 import com.xclone.userservice.error.BadRequestException;
 import com.xclone.userservice.repository.db.dao.UserRepository;
 import com.xclone.userservice.repository.db.entity.User;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
     @InjectMocks
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Mock
     private UserRepository userRepository;

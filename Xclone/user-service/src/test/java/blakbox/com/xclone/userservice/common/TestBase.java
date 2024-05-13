@@ -1,6 +1,6 @@
 package blakbox.com.xclone.userservice.common;
 
-import com.xclone.userservice.UserServiceApplication;
+import com.xclone.userservice.Application;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
@@ -8,7 +8,6 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
@@ -23,8 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ActiveProfiles("test")
-@SpringBootTest(classes = {UserServiceApplication.class})
-@AutoConfigureWireMock(port = 8082)
+@SpringBootTest(classes = {Application.class})
 public class TestBase {
     @Autowired
     private DataSource dataSource;
@@ -50,6 +48,18 @@ public class TestBase {
         RequestSpecification specification = getSpecificationBuilder(new HashMap<>()).build();
 
         return RestAssured.given().spec(specification).get(String.format(CommonTestData.GET_USER_DETAILS, userId));
+    }
+
+    protected Response loginUser(String reqBodyFileName) throws IOException {
+        RequestSpecification specification = getSpecificationBuilder(new HashMap<>()).setBody(readJsonContentFromResource(CommonTestData.REQUEST_LOGIN_PATH + reqBodyFileName)).build();
+
+        return RestAssured.given().spec(specification).post(CommonTestData.LOGIN);
+    }
+
+    protected Response registrationUser(String reqBodyFileName) throws IOException {
+        RequestSpecification specification = getSpecificationBuilder(new HashMap<>()).setBody(readJsonContentFromResource(CommonTestData.REQUEST_LOGIN_PATH + reqBodyFileName)).build();
+
+        return RestAssured.given().spec(specification).post(CommonTestData.REGISTRATION);
     }
 
     protected void runScriptFromResource(String fileName) throws SQLException {
