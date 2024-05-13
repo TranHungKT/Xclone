@@ -94,6 +94,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    @Transactional
     public void resetPassword(ResetPasswordRequest request){
         var user = userRepository.findByEmailAndPasswordResetCode(request.getEmail(), request.getResetPasswordCode())
                 .orElseThrow(() -> ErrorHelper.buildBadRequestException("Bad request", "User do not exist"));
