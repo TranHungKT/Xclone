@@ -25,13 +25,13 @@ public class MailSenderServiceImpl implements MailSenderService {
     private final SpringTemplateEngine templateEngine;
 
     @Override
-    public void sendHtmlEmail(String template, String to, Map<String, Object> attributes ,String subject) throws MessagingException {
+    public void sendHtmlEmail(String template, String to, Map<String, Object> attributes, String subject) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         Context context = new Context();
         context.setVariables(attributes);
         String process = templateEngine.process(template, context);
 
-        MimeMessageHelper mimeMessageHelper  = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_RELATED, StandardCharsets.UTF_8.name());
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_RELATED, StandardCharsets.UTF_8.name());
 
         mimeMessageHelper.setTo(to);
         mimeMessageHelper.setFrom(new InternetAddress(USER_NAME));
