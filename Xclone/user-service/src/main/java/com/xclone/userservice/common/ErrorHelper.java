@@ -4,6 +4,7 @@ import com.xclone.userservice.error.ApiErrorDetails;
 import com.xclone.userservice.error.BadRequestException;
 import jakarta.mail.MessagingException;
 import lombok.experimental.UtilityClass;
+import org.springframework.security.authentication.BadCredentialsException;
 
 import java.util.Collections;
 
@@ -35,5 +36,7 @@ public final class ErrorHelper {
     public static MessagingException buildMessagingException(String issue) {
         return new MessagingException(issue);
     }
-
+    public static BadCredentialsException buildBadCredentialsException(String issue) {
+        return new BadCredentialsException(issue);
+    }
 }

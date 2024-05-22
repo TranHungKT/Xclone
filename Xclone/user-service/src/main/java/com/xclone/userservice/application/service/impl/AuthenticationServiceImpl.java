@@ -4,8 +4,6 @@ import com.xclone.userservice.application.service.AuthenticationService;
 import com.xclone.userservice.application.service.JwtService;
 import com.xclone.userservice.application.service.MailSenderService;
 import com.xclone.userservice.common.ErrorHelper;
-import com.xclone.userservice.error.ApiErrorDetails;
-import com.xclone.userservice.error.BadRequestException;
 import com.xclone.userservice.repository.db.dao.UserRepository;
 import com.xclone.userservice.repository.db.entity.User;
 import com.xclone.userservice.requestDto.ActiveUserRequest;
@@ -22,10 +20,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -79,23 +75,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public void forgotPassword(String email) throws MessagingException {
-            var user = userRepository.findUserByEmail(email).orElseThrow(() -> ErrorHelper.buildBadRequestException("Bad request", "User email do not exist"));
+        var user = userRepository.findUserByEmail(email).orElseThrow(() -> ErrorHelper.buildBadRequestException("Bad request", "User email do not exist"));
 
-            String passwordResetCode = UUID.randomUUID().toString();
-            user.setPasswordResetCode(passwordResetCode);
-            userRepository.save(user);
+        String passwordResetCode = UUID.randomUUID().toString();
+        user.setPasswordResetCode(passwordResetCode);
+        userRepository.save(user);
 
-            String subject = "Reset password";
-            String template = "password-reset-template";
-            Map<String, Object> attributes = new HashMap<>();
-            attributes.put("fullName", user.getFullName());
-            attributes.put("resetUrl", "http://" + hostname + "/email/" + user.getEmail() + "/reset/" + user.getPasswordResetCode());
-            mailSenderService.sendHtmlEmail(template, user.getEmail(), attributes, subject);
+        String subject = "Reset password";
+        String template = "password-reset-template";
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("fullName", user.getFullName());
+        attributes.put("resetUrl", "http://" + hostname + "/email/" + user.getEmail() + "/reset/" + user.getPasswordResetCode());
+        mailSenderService.sendHtmlEmail(template, user.getEmail(), attributes, subject);
     }
 
     @Override
     @Transactional
-    public void resetPassword(ResetPasswordRequest request){
+    public void resetPassword(ResetPasswordRequest request) {
         var user = userRepository.findByEmailAndPasswordResetCode(request.getEmail(), request.getResetPasswordCode())
                 .orElseThrow(() -> ErrorHelper.buildBadRequestException("Bad request", "User do not exist"));
 

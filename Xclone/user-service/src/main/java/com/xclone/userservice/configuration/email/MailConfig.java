@@ -38,7 +38,7 @@ public class MailConfig {
     public static final String EMAIL_TEMPLATE_CODING = "UTF-8";
 
     @Bean
-    JavaMailSender getJavaMailSender(){
+    JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
         mailSender.setHost(HOST);
