@@ -1,5 +1,6 @@
 package unit.com.xclone.userservice.application.service;
 
+import com.xclone.userservice.application.service.MailSenderService;
 import com.xclone.userservice.application.service.impl.AuthenticationServiceImpl;
 import com.xclone.userservice.application.service.impl.JwtServiceImpl;
 import com.xclone.userservice.error.BadRequestException;
@@ -48,6 +49,9 @@ public class AuthenticationServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private MailSenderService mailSenderService;
+
     @Captor
     private ArgumentCaptor<User> userArgumentCaptor;
 
@@ -61,7 +65,7 @@ public class AuthenticationServiceTest {
 
         var token = "eyJhbGciOiJIUzM4NCJ9.eyJleHAiOjE3MTQ0NzM1OTgsImZ1bGxOYW1lIjoidHJhbiBodW5nIiwiZW1haWwiOiJ0cmFuaHVuZzFAZ21haWwuY29tIn0.sGZJnivKi13y9MFMR4EQFq1WvV2G5OLbs0TBLFRgUVgQAr2umsvWY5wEkYPOrsaz";
 
-        User user = User.builder().id(UUID.randomUUID()).fullName("tran hung").email("tranhung@gmail.com").build();
+        User user = User.builder().userId(UUID.randomUUID()).fullName("tran hung").email("tranhung@gmail.com").build();
 
         when(authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()))).thenReturn(Mockito.mock(Authentication.class));

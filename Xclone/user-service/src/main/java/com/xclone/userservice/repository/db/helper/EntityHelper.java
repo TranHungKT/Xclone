@@ -5,4 +5,5 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public final class EntityHelper {
     public static final String USER_TABLE = "users";
+    public static final String TWEET_TABLE = "tweet";
 }

@@ -2,21 +2,26 @@ package com.xclone.userservice.repository.db.entity;
 
 import com.xclone.userservice.repository.db.helper.EntityHelper;
 import com.xclone.userservice.requestDto.RegistrationRequest;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -26,10 +31,9 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public class User extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID userId;
 
     @Column(unique = true, name = "email")
     @NotNull
@@ -50,9 +54,15 @@ public class User extends BaseEntity {
     private String passwordResetCode;
     private String role;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @Builder.Default
+    @OneToMany(mappedBy = Tweet_.USER, cascade = CascadeType.ALL)
+    private List<Tweet> tweets = List.of();
+
     public static User from(@NonNull RegistrationRequest request, PasswordEncoder passwordEncoder) {
         return User.builder()
-                .id(UUID.randomUUID())
+                .userId(UUID.randomUUID())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .createdBy(request.getFullName())

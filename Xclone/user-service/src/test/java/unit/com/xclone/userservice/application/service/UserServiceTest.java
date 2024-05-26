@@ -28,7 +28,7 @@ public class UserServiceTest {
     @Test
     void getUserById_givenValidId_returnExpected() {
         UUID validUserId = UUID.fromString("96751bae-00d0-4b73-b59f-4ffa8112e04c");
-        when(userRepository.findUserById(validUserId)).thenReturn(Optional.ofNullable(User.builder().id(validUserId).username("tran hung").build()));
+        when(userRepository.findByUserId(validUserId)).thenReturn(Optional.ofNullable(User.builder().userId(validUserId).username("tran hung").build()));
 
         var actual = userService.getUserById(validUserId);
 
@@ -39,7 +39,7 @@ public class UserServiceTest {
     @Test
     void getUserById_givenInValidId_returnException() {
         UUID validUserId = UUID.fromString("96751bae-00d0-4b73-b59f-4ffa8112e04c");
-        when(userRepository.findUserById(validUserId)).thenReturn(Optional.empty());
+        when(userRepository.findByUserId(validUserId)).thenReturn(Optional.empty());
 
         assertThrows(
                 BadRequestException.class,

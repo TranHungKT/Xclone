@@ -54,7 +54,7 @@ public class UserDetailsResponseDto {
 
     public static UserDetailsResponseDto convertToUserDetailsResponseDto(User user) {
         return UserDetailsResponseDto.builder()
-                .id(user.getId())
+                .id(user.getUserId())
                 .email(user.getEmail())
                 .fullName(user.getFullName())
                 .username(user.getUsername())

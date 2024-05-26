@@ -1,11 +1,13 @@
 package blakbox.com.xclone.userservice.common;
 
 import com.xclone.userservice.Application;
+import com.xclone.userservice.responseDto.LoginResponseDto;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
@@ -44,10 +46,20 @@ public class TestBase {
                 ;
     }
 
-    protected Response getUserDetails(String userId) throws IOException {
-        RequestSpecification specification = getSpecificationBuilder(new HashMap<>()).build();
+    protected Response getUserDetails(String userId, String token) throws IOException {
+        var headers = new HashMap<String, String>();
+        headers.put("Authorization", "Bearer " + token);
+        RequestSpecification specification = getSpecificationBuilder(headers).build();
 
         return RestAssured.given().spec(specification).get(String.format(CommonTestData.GET_USER_DETAILS, userId));
+    }
+
+    protected Response createTweet(String reqBodyFile, String token) throws IOException {
+        var headers = new HashMap<String, String>();
+        headers.put("Authorization", "Bearer " + token);
+        RequestSpecification specification = getSpecificationBuilder(headers).setBody(readJsonContentFromResource(CommonTestData.REQUEST_TWEET_PATH + reqBodyFile)).build();
+
+        return RestAssured.given().spec(specification).post(CommonTestData.CREATE_TWEET);
     }
 
     protected Response loginUser(String reqBodyFileName) throws IOException {
@@ -60,6 +72,16 @@ public class TestBase {
         RequestSpecification specification = getSpecificationBuilder(new HashMap<>()).setBody(readJsonContentFromResource(CommonTestData.REQUEST_LOGIN_PATH + reqBodyFileName)).build();
 
         return RestAssured.given().spec(specification).post(CommonTestData.REGISTRATION);
+    }
+
+    protected String loginUserAndExtractToken() throws IOException {
+        return loginUser("login_user_req").then().log()
+                .body()
+                .statusCode(HttpStatus.SC_OK)
+                .extract()
+                .body()
+                .as(LoginResponseDto.class)
+                .getToken();
     }
 
     protected void runScriptFromResource(String fileName) throws SQLException {
