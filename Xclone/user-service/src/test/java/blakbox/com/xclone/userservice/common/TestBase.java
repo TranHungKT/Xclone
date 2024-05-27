@@ -59,7 +59,15 @@ public class TestBase {
         headers.put("Authorization", "Bearer " + token);
         RequestSpecification specification = getSpecificationBuilder(headers).setBody(readJsonContentFromResource(CommonTestData.REQUEST_TWEET_PATH + reqBodyFile)).build();
 
-        return RestAssured.given().spec(specification).post(CommonTestData.CREATE_TWEET);
+        return RestAssured.given().spec(specification).post(CommonTestData.TWEET);
+    }
+
+    protected Response getTweets( String token) throws IOException {
+        var headers = new HashMap<String, String>();
+        headers.put("Authorization", "Bearer " + token);
+        RequestSpecification specification = getSpecificationBuilder(headers).build();
+
+        return RestAssured.given().spec(specification).get(CommonTestData.TWEET);
     }
 
     protected Response loginUser(String reqBodyFileName) throws IOException {
@@ -82,6 +90,10 @@ public class TestBase {
                 .body()
                 .as(LoginResponseDto.class)
                 .getToken();
+    }
+
+    public String replaceTimeStamp(String text){
+        return text.replaceAll("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d+", "");
     }
 
     protected void runScriptFromResource(String fileName) throws SQLException {

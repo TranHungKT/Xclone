@@ -23,9 +23,6 @@ public class WebSecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserRepository userRepository;
 
-    @Value("${byPassed:false}")
-    private boolean byPassed;
-
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -47,17 +44,14 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        if (byPassed) {
-            httpSecurity.authorizeHttpRequests(request -> request.anyRequest().permitAll()).csrf(AbstractHttpConfigurer::disable);
-        } else {
-            httpSecurity.authorizeHttpRequests(request ->
-                            request
-                                    .requestMatchers("/api/v1/auth/**").permitAll()
-                                    .anyRequest().authenticated()
-                    )
-                    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                    .csrf(AbstractHttpConfigurer::disable);
-        }
+        httpSecurity.authorizeHttpRequests(request ->
+                        request
+                                .requestMatchers("/api/v1/auth/**").permitAll()
+                                .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf(AbstractHttpConfigurer::disable);
+
         return httpSecurity.build();
     }
 }
