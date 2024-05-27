@@ -10,4 +10,5 @@ public interface TweetService {
     void createTweet(CreateTweetRequest request);
     List<TweetResponseDto> getTweets();
     TweetResponseDto getTweetDetails(UUID id);
+    void deleteTweet(UUID id);
 }

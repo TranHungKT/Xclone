@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface TweetRepository extends JpaRepository<Tweet, UUID> {
     List<Tweet> findAllByUser(User user);
     Optional<Tweet> findByTweetIdAndUser(UUID id, User user);
+    void deleteByTweetId(UUID id);
 }

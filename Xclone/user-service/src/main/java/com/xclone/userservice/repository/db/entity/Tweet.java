@@ -35,7 +35,7 @@ public class Tweet extends BaseEntity {
     @NotNull
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = User_.USER_ID)
     private User user;
 

@@ -8,6 +8,7 @@ import com.xclone.userservice.repository.db.entity.Tweet;
 import com.xclone.userservice.repository.db.entity.User;
 import com.xclone.userservice.requestDto.CreateTweetRequest;
 import com.xclone.userservice.responseDto.TweetResponseDto;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TweetServiceImpl implements TweetService {
     private final UserRepository userRepository;
     private final TweetRepository tweetRepository;
@@ -39,6 +41,13 @@ public class TweetServiceImpl implements TweetService {
         Tweet tweet = tweetRepository.findByTweetIdAndUser(id, getUser()).orElseThrow(() -> ErrorHelper.buildBadRequestException("Tweet", "Can not find tweet"));
 
         return TweetResponseDto.convertToTweetResponseDto(tweet);
+    }
+
+    @Override
+    public void deleteTweet(UUID id){
+        Tweet tweet = tweetRepository.findByTweetIdAndUser(id, getUser()).orElseThrow(() -> ErrorHelper.buildBadRequestException("Tweet", "Can not find tweet"));
+
+        tweetRepository.deleteByTweetId(tweet.getTweetId());
     }
 
     private User getUser(){
