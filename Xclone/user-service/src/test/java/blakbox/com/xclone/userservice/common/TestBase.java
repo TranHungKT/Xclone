@@ -70,6 +70,15 @@ public class TestBase {
         return RestAssured.given().spec(specification).get(CommonTestData.TWEET);
     }
 
+    protected Response getTweetById(String id, String token) throws IOException {
+        var headers = new HashMap<String, String>();
+        headers.put("Authorization", "Bearer " + token);
+        RequestSpecification specification = getSpecificationBuilder(headers).build();
+
+        return RestAssured.given().spec(specification).get(String.format(CommonTestData.TWEET_BY_ID, id));
+    }
+
+
     protected Response loginUser(String reqBodyFileName) throws IOException {
         RequestSpecification specification = getSpecificationBuilder(new HashMap<>()).setBody(readJsonContentFromResource(CommonTestData.REQUEST_LOGIN_PATH + reqBodyFileName)).build();
 

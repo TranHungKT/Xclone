@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,19 +24,25 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public void createTweet(CreateTweetRequest request) {
-        Principal principal = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findUserByEmail(principal.getName()).orElseThrow(() -> ErrorHelper.buildBadRequestException("Email", "Can not find user"));
-
-        tweetRepository.save(Tweet.from(request, user));
+        tweetRepository.save(Tweet.from(request, getUser()));
     }
 
     @Override
     public List<TweetResponseDto> getTweets(){
-        Principal principal = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findUserByEmail(principal.getName()).orElseThrow(() -> ErrorHelper.buildBadRequestException("Email", "Can not find user"));
-
-        List<Tweet> tweets = tweetRepository.findAllByUser(user);
+        List<Tweet> tweets = tweetRepository.findAllByUser(getUser());
 
         return tweets.stream().map(TweetResponseDto::convertToTweetResponseDto).toList();
+    }
+
+    @Override
+    public TweetResponseDto getTweetDetails(UUID id){
+        Tweet tweet = tweetRepository.findByTweetIdAndUser(id, getUser()).orElseThrow(() -> ErrorHelper.buildBadRequestException("Tweet", "Can not find tweet"));
+
+        return TweetResponseDto.convertToTweetResponseDto(tweet);
+    }
+
+    private User getUser(){
+        Principal principal = SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findUserByEmail(principal.getName()).orElseThrow(() -> ErrorHelper.buildBadRequestException("Email", "Can not find user"));
     }
 }

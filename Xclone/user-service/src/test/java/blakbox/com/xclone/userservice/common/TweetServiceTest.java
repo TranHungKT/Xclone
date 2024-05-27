@@ -16,6 +16,7 @@ import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TweetServiceTest extends TestBase {
     private String token;
+
     @BeforeEach
     void setUp() throws SQLException, IOException {
         runScriptFromResource("blackbox/tweet.sql");
@@ -27,7 +28,23 @@ public class TweetServiceTest extends TestBase {
             "get_tweets_res",
     }, delimiter = '|')
     void givenGetTweetRequest_returnExpected(String resFileName) throws IOException, JSONException {
-        String actualResponse =  getTweets( token).then().log()
+        String actualResponse = getTweets(token).then().log()
+                .body()
+                .statusCode(HttpStatus.SC_OK)
+                .extract()
+                .body()
+                .asString();
+
+        String expectedResponse = readJsonContentFromResource(CommonTestData.GET_TWEETS_RESPONSE + resFileName);
+        assertEquals(expectedResponse, actualResponse, true);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "7645ebd0-6d94-4d72-94f3-2ef86dc2c48d|get_tweet_by_id_res",
+    }, delimiter = '|')
+    void givenGetTweetByIdRequest_returnExpected(String tweetId, String resFileName) throws IOException, JSONException {
+        String actualResponse = getTweetById(tweetId, token).then().log()
                 .body()
                 .statusCode(HttpStatus.SC_OK)
                 .extract()
