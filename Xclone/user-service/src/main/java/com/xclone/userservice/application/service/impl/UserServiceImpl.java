@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetailsResponseDto getUserById(UUID id) {
         final var user = userRepository
-                .findUserById(id)
+                .findByUserId(id)
                 .orElseThrow(() -> ErrorHelper.buildBadRequestException("userID", String.format("Can not find user with id %s", id.toString()), id.toString()));
 
         return UserDetailsResponseDto.convertToUserDetailsResponseDto(user);

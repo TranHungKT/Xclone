@@ -35,11 +35,11 @@ public class AuthenticationServiceTest extends TestBase {
     @CsvSource(value = {
             "login_wrong_password_req"
     }, delimiter = '|')
-    void givenInvalidData_loginUser_return403(String reqBodyFileName) throws IOException {
+    void givenInvalidData_loginUser_return401(String reqBodyFileName) throws IOException {
         String invalidFile = "invalid/" + reqBodyFileName;
         loginUser(invalidFile).then().log()
                 .body()
-                .statusCode(HttpStatus.SC_FORBIDDEN)
+                .statusCode(HttpStatus.SC_UNAUTHORIZED)
                 .extract()
                 .body()
                 .asString();
@@ -48,7 +48,8 @@ public class AuthenticationServiceTest extends TestBase {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "login_wrong_email_req",
+            "login_no_email",
+            "login_no_password",
     }, delimiter = '|')
     void givenInvalidData_loginUser_return400(String reqBodyFileName) throws IOException {
         String invalidFile = "invalid/" + reqBodyFileName;

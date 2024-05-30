@@ -16,9 +16,11 @@ import java.sql.SQLException;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserServiceTest extends TestBase {
+    private String token;
     @BeforeAll
-    void setUp() throws SQLException {
+    void setUp() throws SQLException, IOException {
         runScriptFromResource("blackbox/user.sql");
+        token = loginUserAndExtractToken();
     }
 
 //    Do not need to clear data for now
@@ -33,7 +35,7 @@ public class UserServiceTest extends TestBase {
             "96751bae-00d0-4b73-b59f-4ffa8112e04c|user_details",
     }, delimiter = '|')
     void givenUserId_whenCallGetUserDetails_returnExcepted(String userId, String responseFile) throws IOException, JSONException {
-        var actualResponse = getUserDetails(userId).then().log()
+        var actualResponse = getUserDetails(userId, token).then().log()
                 .body()
                 .statusCode(HttpStatus.SC_OK)
                 .extract()
@@ -49,7 +51,7 @@ public class UserServiceTest extends TestBase {
             "96751bae-00d0-4b73-b59f-4ffa8112e321|invalid_user"
     }, delimiter = '|')
     void givenInvalidUserId_whenCallGetUserDetails_returnException(String userId, String responseFile) throws IOException, JSONException {
-        var actualResponse = getUserDetails(userId).then().log()
+        var actualResponse = getUserDetails(userId, token).then().log()
                 .body()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .extract()
