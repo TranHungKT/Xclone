@@ -2,6 +2,7 @@ package com.xclone.userservice.application.service.impl;
 
 import com.xclone.userservice.application.service.TweetService;
 import com.xclone.userservice.common.ErrorHelper;
+import com.xclone.userservice.configuration.security.SecurityUserDetails;
 import com.xclone.userservice.repository.db.dao.TweetRepository;
 import com.xclone.userservice.repository.db.dao.UserRepository;
 import com.xclone.userservice.repository.db.entity.Tweet;
@@ -51,7 +52,7 @@ public class TweetServiceImpl implements TweetService {
     }
 
     private User getUser(){
-        Principal principal = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findUserByEmail(principal.getName()).orElseThrow(() -> ErrorHelper.buildBadRequestException("Email", "Can not find user"));
+        SecurityUserDetails principal = (SecurityUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return principal.getUser();
     }
 }

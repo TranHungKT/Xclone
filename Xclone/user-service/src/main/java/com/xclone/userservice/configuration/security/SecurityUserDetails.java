@@ -56,4 +56,8 @@ public class SecurityUserDetails implements UserDetails {
     public boolean isEnabled() {
         return user.isConfirmed();
     }
+
+    public User getUser(){
+        return this.user;
+    }
 }
