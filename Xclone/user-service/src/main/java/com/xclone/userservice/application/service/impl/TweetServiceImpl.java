@@ -1,7 +1,6 @@
 package com.xclone.userservice.application.service.impl;
 
 import com.xclone.userservice.application.service.TweetService;
-import com.xclone.userservice.application.service.UserService;
 import com.xclone.userservice.common.ErrorHelper;
 import com.xclone.userservice.repository.db.dao.ImageRepository;
 import com.xclone.userservice.repository.db.dao.TweetRepository;
@@ -21,7 +20,6 @@ import java.util.UUID;
 @Transactional
 public class TweetServiceImpl implements TweetService {
     private final TweetRepository tweetRepository;
-    private final UserService userService;
     private final ImageRepository imageRepository;
 
     @Override
@@ -33,28 +31,28 @@ public class TweetServiceImpl implements TweetService {
             throw ErrorHelper.buildBadRequestException("ImageIDs", "some image is already attach with other tweet");
         }
 
-        Tweet tweet = Tweet.from(request, userService.getUser());
+        Tweet tweet = Tweet.from(request, UserServiceImpl.getUser());
         images.forEach(image -> image.setTweet(tweet));
         tweetRepository.save(tweet);
     }
 
     @Override
     public List<TweetResponseDto> getTweets() {
-        List<Tweet> tweets = tweetRepository.findAllByUser(userService.getUser());
+        List<Tweet> tweets = tweetRepository.findAllByUser(UserServiceImpl.getUser());
 
         return tweets.stream().map(TweetResponseDto::convertToTweetResponseDto).toList();
     }
 
     @Override
     public TweetResponseDto getTweetDetails(UUID id) {
-        Tweet tweet = tweetRepository.findByTweetIdAndUser(id, userService.getUser()).orElseThrow(() -> ErrorHelper.buildBadRequestException("Tweet", "Can not find tweet"));
+        Tweet tweet = tweetRepository.findByTweetIdAndUser(id, UserServiceImpl.getUser()).orElseThrow(() -> ErrorHelper.buildBadRequestException("Tweet", "Can not find tweet"));
 
         return TweetResponseDto.convertToTweetResponseDto(tweet);
     }
 
     @Override
     public void deleteTweet(UUID id) {
-        Tweet tweet = tweetRepository.findByTweetIdAndUser(id, userService.getUser()).orElseThrow(() -> ErrorHelper.buildBadRequestException("Tweet", "Can not find tweet"));
+        Tweet tweet = tweetRepository.findByTweetIdAndUser(id, UserServiceImpl.getUser()).orElseThrow(() -> ErrorHelper.buildBadRequestException("Tweet", "Can not find tweet"));
 
         tweetRepository.deleteByTweetId(tweet.getTweetId());
     }

@@ -26,8 +26,7 @@ public class UserServiceImpl implements UserService {
         return UserDetailsResponseDto.convertToUserDetailsResponseDto(user);
     }
 
-    @Override
-    public User getUser(){
+    public static User getUser() {
         SecurityUserDetails principal = (SecurityUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return principal.getUser();
     }

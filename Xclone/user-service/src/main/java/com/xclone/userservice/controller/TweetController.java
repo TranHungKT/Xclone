@@ -31,17 +31,17 @@ public class TweetController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<TweetResponseDto>> getTweets(){
+    public ResponseEntity<List<TweetResponseDto>> getTweets() {
         return new ResponseEntity<>(tweetService.getTweets(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<TweetResponseDto> getTweetDetails(@PathVariable @Valid final UUID id){
+    public ResponseEntity<TweetResponseDto> getTweetDetails(@PathVariable @Valid final UUID id) {
         return new ResponseEntity<>(tweetService.getTweetDetails(id), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteTweet(@PathVariable @Valid final UUID id){
+    public ResponseEntity<Void> deleteTweet(@PathVariable @Valid final UUID id) {
         tweetService.deleteTweet(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

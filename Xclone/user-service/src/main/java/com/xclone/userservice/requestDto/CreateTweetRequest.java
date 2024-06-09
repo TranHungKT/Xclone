@@ -1,6 +1,5 @@
 package com.xclone.userservice.requestDto;
 
-import com.xclone.userservice.repository.db.entity.Image;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

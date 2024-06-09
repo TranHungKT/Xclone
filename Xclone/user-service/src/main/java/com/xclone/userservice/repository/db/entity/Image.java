@@ -43,7 +43,7 @@ public class Image extends BaseEntity {
     @JoinColumn(name = Tweet_.TWEET_ID)
     private Tweet tweet;
 
-    public static Image from(@NonNull String imageSrc, User user){
+    public static Image from(@NonNull String imageSrc, User user) {
         return Image.builder()
                 .src(imageSrc)
                 .createdBy(user.getUserId().toString())
