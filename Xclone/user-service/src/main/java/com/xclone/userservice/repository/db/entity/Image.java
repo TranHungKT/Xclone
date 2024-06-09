@@ -1,8 +1,6 @@
 package com.xclone.userservice.repository.db.entity;
 
 import com.xclone.userservice.repository.db.helper.EntityHelper;
-import com.xclone.userservice.requestDto.CreateTweetRequest;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,48 +9,43 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = EntityHelper.TWEET_TABLE)
+@Table(name = EntityHelper.IMAGE_TABLE)
+@Data
 @SuperBuilder(toBuilder = true)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@Getter
-@Setter
-public class Tweet extends BaseEntity {
+public class Image extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID tweetId;
+    private UUID imageId;
 
     @Column
     @NotNull
-    private String text;
+    private String src;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = User_.USER_ID)
     private User user;
 
-    @OneToMany(mappedBy = Image_.TWEET, fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
-    private Set<Image> images = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = Tweet_.TWEET_ID)
+    private Tweet tweet;
 
-    public static Tweet from(CreateTweetRequest request, User user) {
-        return Tweet.builder()
-                .text(request.getText())
-                .user(user)
+    public static Image from(@NonNull String imageSrc, User user){
+        return Image.builder()
+                .src(imageSrc)
                 .createdBy(user.getUserId().toString())
                 .build();
     }
