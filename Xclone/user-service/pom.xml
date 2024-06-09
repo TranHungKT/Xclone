@@ -63,7 +63,12 @@
             <artifactId>thymeleaf</artifactId>
             <version>3.1.2.RELEASE</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect -->
+        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>1.12.730</version>
+        </dependency>
 
 
     </dependencies>

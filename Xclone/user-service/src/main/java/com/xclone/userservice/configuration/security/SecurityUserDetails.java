@@ -1,6 +1,7 @@
 package com.xclone.userservice.configuration.security;
 
 import com.xclone.userservice.repository.db.entity.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Getter
 public class SecurityUserDetails implements UserDetails {
     private User user;
 
@@ -57,7 +59,4 @@ public class SecurityUserDetails implements UserDetails {
         return user.isConfirmed();
     }
 
-    public User getUser(){
-        return this.user;
-    }
 }

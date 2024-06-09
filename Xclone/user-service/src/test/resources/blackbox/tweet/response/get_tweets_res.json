@@ -2,11 +2,22 @@
   {
     "id": "7645ebd0-6d94-4d72-94f3-2ef86dc2c48d",
     "text": "Hello tweet",
-    "date": "2024-04-21T13:20:37"
+    "date": "2024-04-21T13:20:37",
+    "images": [
+      {
+        "imageId": "e06e7ef0-133f-40d9-bd52-482a731346d9",
+        "imageSrc": "https://xclonebucket.s3.ap-southeast-2.amazonaws.com/410f5301-9d79-4a37-8dd6-39c2f9ba4f0c_Screenshot%202024-06-02%20at%2000.24.56.png"
+      },
+      {
+        "imageId": "fa9fa5ec-305e-4c7e-8f39-bf961ef0202c",
+        "imageSrc": "https://xclonebucket.s3.ap-southeast-2.amazonaws.com/410f5301-9d79-4a37-8dd6-39c2f9ba4f0c_Screenshot%202024-06-02%20at%2000.24.56.png"
+      }
+    ]
   },
   {
     "id": "ef1f4fef-8d73-4bbb-99e0-adf65117fa5b",
     "text": "Hello tweet 2",
-    "date": "2024-04-21T13:20:37"
+    "date": "2024-04-21T13:20:37",
+    "images": []
   }
 ]

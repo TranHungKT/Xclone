@@ -1,5 +1,7 @@
-package blakbox.com.xclone.userservice.common;
+package blakbox.com.xclone.userservice;
 
+import blakbox.com.xclone.userservice.common.CommonTestData;
+import blakbox.com.xclone.userservice.common.TestBase;
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.junit.jupiter.api.BeforeAll;
@@ -67,6 +69,4 @@ public class TweetServiceTest extends TestBase {
                 .body()
                 .asString();
     }
-
-
 }

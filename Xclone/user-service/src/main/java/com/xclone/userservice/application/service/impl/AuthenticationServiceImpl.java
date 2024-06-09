@@ -52,14 +52,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         User user = User.from(request, passwordEncoder);
         userRepository.save(user);
-
-        String subject = "Activation code";
-        String template = "registration-template";
-        Map<String, Object> attributes = new HashMap<>();
-        attributes.put("fullName", user.getFullName());
-        attributes.put("registrationUrl", "http://" + hostname + "/email/" + user.getEmail() + "/activate/" + user.getActivationCode());
-
-        mailSenderService.sendHtmlEmail(template, user.getEmail(), attributes, subject);
+//
+//        String subject = "Activation code";
+//        String template = "registration-template";
+//        Map<String, Object> attributes = new HashMap<>();
+//        attributes.put("fullName", user.getFullName());
+//        attributes.put("registrationUrl", "http://" + hostname + "/email/" + user.getEmail() + "/activate/" + user.getActivationCode());
+//
+//        mailSenderService.sendHtmlEmail(template, user.getEmail(), attributes, subject);
     }
 
     @Override
