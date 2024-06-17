@@ -5,13 +5,10 @@ import com.xclone.userservice.requestDto.RegistrationRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -56,11 +53,7 @@ public class User extends BaseEntity {
     private String activationCode;
     private String passwordResetCode;
     private String role;
-
-    @OneToOne(mappedBy = Image_.USER, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = Image_.IMAGE_ID)
-    private Image userImage;
-
+    
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @Builder.Default

@@ -2,7 +2,7 @@ package com.xclone.userservice.responseDto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.xclone.userservice.repository.db.entity.Image;
+import com.xclone.userservice.repository.db.entity.TweetImage;
 import com.xclone.userservice.repository.db.entity.Tweet;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,7 +40,7 @@ public class TweetResponseDto {
                 .id(response.getTweetId())
                 .text(response.getText())
                 .date(Optional.ofNullable(response.getUpdatedDt()).orElse(response.getCreatedDt()))
-                .images(TweetImageResponseDto.convertToTweetImageResponseDto(response.getImages()))
+                .images(TweetImageResponseDto.convertToTweetImageResponseDto(response.getTweetImages()))
                 .build();
     }
 
@@ -57,8 +57,8 @@ public class TweetResponseDto {
         @JsonProperty("imageSrc")
         private String imageSrc;
 
-        public static List<TweetImageResponseDto> convertToTweetImageResponseDto(Set<Image> images) {
-            return images.stream().map(
+        public static List<TweetImageResponseDto> convertToTweetImageResponseDto(Set<TweetImage> tweetImages) {
+            return tweetImages.stream().map(
                     image -> TweetImageResponseDto.builder()
                             .imageId(image.getImageId())
                             .imageSrc(image.getSrc())

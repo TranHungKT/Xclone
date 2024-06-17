@@ -2,7 +2,7 @@ package com.xclone.userservice.responseDto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.xclone.userservice.repository.db.entity.Image;
+import com.xclone.userservice.common.Model.BaseImage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,10 +24,10 @@ public class ImageResponseDto {
     @JsonProperty("imageId")
     private UUID imageId;
 
-    public static ImageResponseDto convertToImageResponseDto(Image image) {
+    public static ImageResponseDto convertToImageResponseDto(BaseImage tweetImage) {
         return ImageResponseDto.builder()
-                .imageId(image.getImageId())
-                .imageSrc(image.getSrc())
+                .imageId(tweetImage.getId())
+                .imageSrc(tweetImage.getSrc())
                 .build();
     }
 }

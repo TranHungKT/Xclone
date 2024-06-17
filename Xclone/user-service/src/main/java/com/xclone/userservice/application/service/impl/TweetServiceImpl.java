@@ -2,7 +2,7 @@ package com.xclone.userservice.application.service.impl;
 
 import com.xclone.userservice.application.service.TweetService;
 import com.xclone.userservice.common.ErrorHelper;
-import com.xclone.userservice.repository.db.dao.ImageRepository;
+import com.xclone.userservice.repository.db.dao.TweetImageRepository;
 import com.xclone.userservice.repository.db.dao.TweetRepository;
 import com.xclone.userservice.repository.db.entity.Tweet;
 import com.xclone.userservice.requestDto.CreateTweetRequest;
@@ -20,11 +20,11 @@ import java.util.UUID;
 @Transactional
 public class TweetServiceImpl implements TweetService {
     private final TweetRepository tweetRepository;
-    private final ImageRepository imageRepository;
+    private final TweetImageRepository tweetImageRepository;
 
     @Override
     public void createTweet(CreateTweetRequest request) {
-        var images = imageRepository.findAllByImageIdIn(request.getImageIds());
+        var images = tweetImageRepository.findAllByImageIdIn(request.getImageIds());
 
         var imagesWithTweetId = images.stream().filter(image -> !Objects.isNull(image.getTweet())).toList();
         if (!imagesWithTweetId.isEmpty()) {

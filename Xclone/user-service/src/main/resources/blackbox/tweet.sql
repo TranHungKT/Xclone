@@ -1,4 +1,4 @@
-TRUNCATE TABLE tweet, users, image;
+TRUNCATE TABLE tweet, users, tweet_image;
 
 INSERT INTO users
 (user_id, created_by, created_dt, updated_by, updated_dt, about, confirmed, email, full_name, location, password,
@@ -20,7 +20,7 @@ VALUES ('7645ebd0-6d94-4d72-94f3-2ef86dc2c48d', '96751bae-00d0-4b73-b59f-4ffa811
        ('ef1f4fef-8d73-4bbb-99e0-adf65117fa5b', '96751bae-00d0-4b73-b59f-4ffa8112e04c', '2024-04-21 13:20:37.000000',
         null, null, 'Hello tweet 2', '96751bae-00d0-4b73-b59f-4ffa8112e04c');
 
-INSERT INTO image
-(image_id, created_by, created_dt, updated_by, updated_dt, src, tweet_id, user_id)
-VALUES ('e06e7ef0-133f-40d9-bd52-482a731346d9', '', '2024-04-21 13:20:37.000000', null, null, 'https://xclonebucket.s3.ap-southeast-2.amazonaws.com/410f5301-9d79-4a37-8dd6-39c2f9ba4f0c_Screenshot%202024-06-02%20at%2000.24.56.png', '7645ebd0-6d94-4d72-94f3-2ef86dc2c48d', null),
-       ('fa9fa5ec-305e-4c7e-8f39-bf961ef0202c', '', '2024-04-21 13:20:37.000000', null, null, 'https://xclonebucket.s3.ap-southeast-2.amazonaws.com/410f5301-9d79-4a37-8dd6-39c2f9ba4f0c_Screenshot%202024-06-02%20at%2000.24.56.png', '7645ebd0-6d94-4d72-94f3-2ef86dc2c48d', null)
+INSERT INTO tweet_image
+(image_id, created_by, created_dt, updated_by, updated_dt, src, tweet_id)
+VALUES ('e06e7ef0-133f-40d9-bd52-482a731346d9', '', '2024-04-21 13:20:37.000000', null, null, 'https://xclonebucket.s3.ap-southeast-2.amazonaws.com/410f5301-9d79-4a37-8dd6-39c2f9ba4f0c_Screenshot%202024-06-02%20at%2000.24.56.png', '7645ebd0-6d94-4d72-94f3-2ef86dc2c48d'),
+       ('fa9fa5ec-305e-4c7e-8f39-bf961ef0202c', '', '2024-04-21 13:20:37.000000', null, null, 'https://xclonebucket.s3.ap-southeast-2.amazonaws.com/410f5301-9d79-4a37-8dd6-39c2f9ba4f0c_Screenshot%202024-06-02%20at%2000.24.56.png', '7645ebd0-6d94-4d72-94f3-2ef86dc2c48d')

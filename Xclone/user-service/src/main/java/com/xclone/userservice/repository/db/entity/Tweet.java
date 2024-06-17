@@ -42,8 +42,8 @@ public class Tweet extends BaseEntity {
     @JoinColumn(name = User_.USER_ID)
     private User user;
 
-    @OneToMany(mappedBy = Image_.TWEET, fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
-    private Set<Image> images = new HashSet<>();
+    @OneToMany(mappedBy = TweetImage_.TWEET, fetch = FetchType.LAZY, cascade = CascadeType.MERGE, orphanRemoval = true)
+    private Set<TweetImage> tweetImages = new HashSet<>();
 
     public static Tweet from(CreateTweetRequest request, User user) {
         return Tweet.builder()
