@@ -5,10 +5,12 @@ import com.xclone.userservice.requestDto.RegistrationRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -53,12 +55,15 @@ public class User extends BaseEntity {
     private String activationCode;
     private String passwordResetCode;
     private String role;
-    
+
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @Builder.Default
     @OneToMany(mappedBy = Tweet_.USER, cascade = CascadeType.ALL)
     private List<Tweet> tweets = List.of();
+
+    @OneToOne(mappedBy = UserImage_.USER, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserImage userImage;
 
     public static User from(@NonNull RegistrationRequest request, PasswordEncoder passwordEncoder) {
         return User.builder()

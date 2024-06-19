@@ -1,4 +1,4 @@
-TRUNCATE TABLE tweet, users, tweet_image;
+TRUNCATE TABLE tweet, users, tweet_image, user_image;
 
 INSERT INTO users
 (user_id, created_by, created_dt, updated_by, updated_dt, about, confirmed, email, full_name, location, password,

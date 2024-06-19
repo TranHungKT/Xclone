@@ -6,7 +6,9 @@ import com.xclone.userservice.common.Enum.ImageType;
 import com.xclone.userservice.common.ErrorHelper;
 import com.xclone.userservice.common.Model.BaseImage;
 import com.xclone.userservice.repository.db.dao.TweetImageRepository;
+import com.xclone.userservice.repository.db.dao.UserImageRepository;
 import com.xclone.userservice.repository.db.entity.TweetImage;
+import com.xclone.userservice.repository.db.entity.UserImage;
 import com.xclone.userservice.requestDto.UploadImageMetadataRequest;
 import com.xclone.userservice.responseDto.ImageResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,7 @@ import java.util.UUID;
 public class AmazonS3ServiceImpl implements AmazonS3Service {
     private final AmazonS3 s3Client;
     private final TweetImageRepository tweetImageRepository;
-
+    private final UserImageRepository userImageRepository;
 
     @Value("${amazonProperties.bucketName}")
     private String bucketName;
@@ -49,7 +51,17 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
                             .build());
         }
 
-        return null;
+
+        UserImage userImage = UserImage.from(getFileUrl(fileName), UserServiceImpl.getUser());
+
+        UserImage savedTweetImage = userImageRepository.save(userImage);
+        return ImageResponseDto.convertToImageResponseDto(
+                BaseImage.builder()
+                        .id(savedTweetImage.getImageId())
+                        .src(savedTweetImage.getSrc())
+                        .build());
+
+
     }
 
     private String getFileUrl(String keyName) {
