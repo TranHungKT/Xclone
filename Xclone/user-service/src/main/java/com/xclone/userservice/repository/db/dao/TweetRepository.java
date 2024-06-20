@@ -14,7 +14,7 @@ public interface TweetRepository extends JpaRepository<Tweet, UUID> {
 
     Optional<Tweet> findByTweetIdAndUser(UUID id, User user);
 
-    @Query("SELECT t FROM Tweet t JOIN Image i ON t.tweetId = i.tweet.tweetId WHERE t.tweetId = :id AND t.user = :user")
+    @Query("SELECT t FROM Tweet t JOIN TweetImage i ON t.tweetId = i.tweet.tweetId WHERE t.tweetId = :id AND t.user = :user")
     Optional<Tweet> findByTweetIdAndUserWithImage(UUID id, User user);
 
     void deleteByTweetId(UUID id);

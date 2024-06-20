@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -21,12 +20,12 @@ import lombok.experimental.SuperBuilder;
 import java.util.UUID;
 
 @Entity
-@Table(name = EntityHelper.IMAGE_TABLE)
+@Table(name = EntityHelper.TWEET_IMAGE_TABLE)
 @Data
 @SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class Image extends BaseEntity {
+public class TweetImage extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID imageId;
@@ -35,16 +34,12 @@ public class Image extends BaseEntity {
     @NotNull
     private String src;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = User_.USER_ID)
-    private User user;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = Tweet_.TWEET_ID)
     private Tweet tweet;
 
-    public static Image from(@NonNull String imageSrc, User user) {
-        return Image.builder()
+    public static TweetImage from(@NonNull String imageSrc, User user) {
+        return TweetImage.builder()
                 .src(imageSrc)
                 .createdBy(user.getUserId().toString())
                 .build();

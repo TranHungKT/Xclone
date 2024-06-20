@@ -38,7 +38,7 @@ public class TweetServiceTest extends TestBase {
                 .asString();
 
         String expectedResponse = readJsonContentFromResource(CommonTestData.GET_TWEETS_RESPONSE + resFileName);
-        assertEquals(expectedResponse, actualResponse, true);
+        assertEquals(expectedResponse, actualResponse, false);
     }
 
     @ParameterizedTest
@@ -54,7 +54,7 @@ public class TweetServiceTest extends TestBase {
                 .asString();
 
         String expectedResponse = readJsonContentFromResource(CommonTestData.GET_TWEETS_RESPONSE + resFileName);
-        assertEquals(expectedResponse, actualResponse, true);
+        assertEquals(expectedResponse, actualResponse, false);
     }
 
     @ParameterizedTest
