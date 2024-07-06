@@ -9,4 +9,5 @@ public final class EntityHelper {
 
     public static final String TWEET_IMAGE_TABLE = "tweet_image";
     public static final String USER_IMAGE_TABLE = "user_image";
+    public static final String TWEET_LIKES_TABLE = "tweet_likes";
 }
