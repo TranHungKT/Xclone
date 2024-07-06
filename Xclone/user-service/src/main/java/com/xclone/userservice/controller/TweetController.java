@@ -2,6 +2,7 @@ package com.xclone.userservice.controller;
 
 import com.xclone.userservice.application.service.TweetService;
 import com.xclone.userservice.requestDto.CreateTweetRequest;
+import com.xclone.userservice.requestDto.ReactTweetRequest;
 import com.xclone.userservice.responseDto.TweetResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,12 @@ public class TweetController {
     @GetMapping("{id}")
     public ResponseEntity<TweetResponseDto> getTweetDetails(@PathVariable @Valid final UUID id) {
         return new ResponseEntity<>(tweetService.getTweetDetails(id), HttpStatus.OK);
+    }
+
+    @PostMapping("react/{id}")
+    public ResponseEntity<Void> reactTweet(@PathVariable @Valid final UUID id, @Valid @RequestBody ReactTweetRequest request){
+        tweetService.reactTweet(id,request );
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("{id}")

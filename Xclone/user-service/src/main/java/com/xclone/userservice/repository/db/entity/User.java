@@ -9,6 +9,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -64,6 +65,10 @@ public class User extends BaseEntity {
 
     @OneToOne(mappedBy = UserImage_.USER, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private UserImage userImage;
+
+    @ManyToMany(mappedBy = Tweet_.LIKES, fetch = FetchType.LAZY)
+    private List<Tweet> likedTweets;
+
 
     public static User from(@NonNull RegistrationRequest request, PasswordEncoder passwordEncoder) {
         return User.builder()
