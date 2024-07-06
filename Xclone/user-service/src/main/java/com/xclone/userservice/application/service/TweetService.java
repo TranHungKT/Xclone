@@ -13,4 +13,5 @@ public interface TweetService {
     TweetResponseDto getTweetDetails(UUID id);
     void deleteTweet(UUID id);
     void reactTweet(UUID id, ReactTweetRequest request);
+    void retweet(UUID id);
 }

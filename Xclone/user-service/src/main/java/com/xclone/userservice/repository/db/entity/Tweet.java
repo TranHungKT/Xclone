@@ -48,10 +48,18 @@ public class Tweet extends BaseEntity {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = EntityHelper.TWEET_LIKES_TABLE,
-            joinColumns = @JoinColumn(name = Tweet_.TWEET_ID ),
+            joinColumns = @JoinColumn(name = Tweet_.TWEET_ID),
             inverseJoinColumns = @JoinColumn(name = User_.USER_ID)
     )
     private List<User> likes;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = EntityHelper.RETWEETS_TABLE,
+            joinColumns = @JoinColumn(name = Tweet_.TWEET_ID),
+            inverseJoinColumns = @JoinColumn(name = User_.USER_ID)
+            )
+    private List<User> retweets;
 
     @OneToMany(mappedBy = TweetImage_.TWEET, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TweetImage> tweetImages = new HashSet<>();

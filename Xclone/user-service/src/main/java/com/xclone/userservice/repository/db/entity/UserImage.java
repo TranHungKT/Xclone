@@ -8,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -26,7 +25,7 @@ import java.util.UUID;
 @SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class UserImage extends BaseEntity{
+public class UserImage extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID imageId;

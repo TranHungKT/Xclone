@@ -6,7 +6,6 @@ import com.xclone.userservice.configuration.security.SecurityUserDetails;
 import com.xclone.userservice.repository.db.dao.UserImageRepository;
 import com.xclone.userservice.repository.db.dao.UserRepository;
 import com.xclone.userservice.repository.db.entity.User;
-import com.xclone.userservice.repository.db.entity.UserImage;
 import com.xclone.userservice.requestDto.UpdateUserDetailsRequest;
 import com.xclone.userservice.responseDto.UserDetailsResponseDto;
 import lombok.RequiredArgsConstructor;

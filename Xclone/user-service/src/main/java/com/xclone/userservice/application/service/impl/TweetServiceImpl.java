@@ -5,6 +5,7 @@ import com.xclone.userservice.common.Enum.ReactTweetType;
 import com.xclone.userservice.common.ErrorHelper;
 import com.xclone.userservice.repository.db.dao.TweetImageRepository;
 import com.xclone.userservice.repository.db.dao.TweetRepository;
+import com.xclone.userservice.repository.db.dao.UserRepository;
 import com.xclone.userservice.repository.db.entity.Tweet;
 import com.xclone.userservice.requestDto.CreateTweetRequest;
 import com.xclone.userservice.requestDto.ReactTweetRequest;
@@ -23,6 +24,7 @@ import java.util.UUID;
 @Transactional
 public class TweetServiceImpl implements TweetService {
     private final TweetRepository tweetRepository;
+    private final UserRepository userRepository;
     private final TweetImageRepository tweetImageRepository;
 
     @Override
@@ -61,20 +63,35 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
+    @Transactional
     public void reactTweet(UUID id, ReactTweetRequest request) {
         if (!ReactTweetType.getSetOfReactTweetType().contains(request.getReactType())) {
             throw ErrorHelper.buildBadRequestException("reactType", "reactType is not valid");
         }
 
-        var user = UserServiceImpl.getUser();
+        var userId = UserServiceImpl.getUser().getUserId();
+        var user = userRepository.findByUserId(userId).orElseThrow(() -> ErrorHelper.buildBadRequestException("userId", "User do not exist"));
         var tweet = tweetRepository.findByTweetId(id).orElseThrow(() -> ErrorHelper.buildBadRequestException("tweetId", "Tweet do not exist"));
         var likedUsers = tweet.getLikes();
 
-        if (Objects.equals(request.getReactType(), ReactTweetType.LIKE.getValue()) &&
-                (ObjectUtils.isEmpty(likedUsers) || !likedUsers.contains(user))) {
+        if (Objects.equals(request.getReactType(), ReactTweetType.LIKE.getValue())
+                && (ObjectUtils.isEmpty(likedUsers) || !likedUsers.contains(user))) {
             likedUsers.add(user);
         } else if (Objects.equals(request.getReactType(), ReactTweetType.DISLIKE.getValue())) {
             likedUsers.remove(user);
+        }
+        tweetRepository.save(tweet);
+    }
+
+    @Override
+    public void retweet(UUID id) {
+        var tweet = tweetRepository.findByTweetId(id).orElseThrow(() -> ErrorHelper.buildBadRequestException("tweetId", "Tweet do not exist"));
+        var user = UserServiceImpl.getUser();
+
+        var retweets = tweet.getRetweets();
+
+        if (!retweets.contains(user)) {
+            retweets.add(user);
         }
         tweetRepository.save(tweet);
     }

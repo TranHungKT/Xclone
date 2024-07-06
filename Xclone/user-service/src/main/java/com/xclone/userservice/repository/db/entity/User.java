@@ -66,9 +66,11 @@ public class User extends BaseEntity {
     @OneToOne(mappedBy = UserImage_.USER, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private UserImage userImage;
 
-    @ManyToMany(mappedBy = Tweet_.LIKES, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = Tweet_.LIKES, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Tweet> likedTweets;
 
+    @ManyToMany(mappedBy = Tweet_.RETWEETS, fetch = FetchType.LAZY)
+    private List<Tweet> retweets;
 
     public static User from(@NonNull RegistrationRequest request, PasswordEncoder passwordEncoder) {
         return User.builder()
