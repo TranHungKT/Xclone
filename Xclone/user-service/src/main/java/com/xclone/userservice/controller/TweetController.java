@@ -42,14 +42,20 @@ public class TweetController {
     }
 
     @PostMapping("react/{id}")
-    public ResponseEntity<Void> reactTweet(@PathVariable @Valid final UUID id, @Valid @RequestBody ReactTweetRequest request){
-        tweetService.reactTweet(id,request );
+    public ResponseEntity<Void> reactTweet(@PathVariable @Valid final UUID id, @Valid @RequestBody ReactTweetRequest request) {
+        tweetService.reactTweet(id, request);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteTweet(@PathVariable @Valid final UUID id) {
         tweetService.deleteTweet(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("retweet/{id}")
+    public ResponseEntity<Void> retweet(@PathVariable @Valid final UUID id) {
+        tweetService.retweet(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
