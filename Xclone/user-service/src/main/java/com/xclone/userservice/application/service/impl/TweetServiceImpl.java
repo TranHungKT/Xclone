@@ -63,7 +63,6 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
-    @Transactional
     public void reactTweet(UUID id, ReactTweetRequest request) {
         if (!ReactTweetType.getSetOfReactTweetType().contains(request.getReactType())) {
             throw ErrorHelper.buildBadRequestException("reactType", "reactType is not valid");

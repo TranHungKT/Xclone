@@ -48,6 +48,6 @@ public class UserServiceImpl implements UserService {
 
     public static User getUser() {
         SecurityUserDetails principal = (SecurityUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return principal.getUser();
+        return principal.user();
     }
 }

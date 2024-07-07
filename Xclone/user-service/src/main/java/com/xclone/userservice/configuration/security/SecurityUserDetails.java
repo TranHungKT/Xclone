@@ -10,14 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Getter
-public class SecurityUserDetails implements UserDetails {
-    private User user;
-
-    public SecurityUserDetails(User user) {
-        this.user = user;
-    }
-
+public record SecurityUserDetails(User user) implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         String roles = user.getRole();
