@@ -83,6 +83,14 @@ public class TestBase {
         return RestAssured.given().spec(specification).post(String.format(CommonTestData.REACT_TWEET, id));
     }
 
+    protected Response updateFollowingUserStatus(String reqBodyFile, UUID id, String token) throws IOException {
+        var headers = new HashMap<String, String>();
+        headers.put("Authorization", "Bearer " + token);
+        RequestSpecification specification = getSpecificationBuilder(headers).setBody(readJsonContentFromResource(CommonTestData.POST_REQUEST_USER_PATH + reqBodyFile)).build();
+
+        return RestAssured.given().spec(specification).post(String.format(CommonTestData.UPDATE_FOLLOWING_STATUS, id));
+    }
+
     protected Response getTweets(String token) throws IOException {
         var headers = new HashMap<String, String>();
         headers.put("Authorization", "Bearer " + token);

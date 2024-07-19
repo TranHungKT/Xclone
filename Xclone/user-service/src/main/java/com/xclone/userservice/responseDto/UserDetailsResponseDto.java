@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -57,7 +59,7 @@ public class UserDetailsResponseDto {
     @JsonProperty("updatedBy")
     private String updatedBy;
 
-    public static UserDetailsResponseDto convertToUserDetailsResponseDto(User user) {
+    public static UserDetailsResponseDto convertToUserDetailsResponseDto(User user, UserImage userImage) {
         return UserDetailsResponseDto.builder()
                 .id(user.getUserId())
                 .email(user.getEmail())
@@ -69,7 +71,7 @@ public class UserDetailsResponseDto {
                 .confirmed(user.isConfirmed())
                 .updatedDt(user.getUpdatedDt())
                 .updatedBy(user.getUpdatedBy())
-                .avatar(user.getUserImage() != null ? AvatarResponseDto.convertToAvatarResponseDto(user.getUserImage()) : null)
+                .avatar(Objects.isNull(userImage) ? null : AvatarResponseDto.convertToAvatarResponseDto(userImage) )
                 .build();
     }
 
@@ -87,10 +89,11 @@ public class UserDetailsResponseDto {
         private String imageSrc;
 
         public static AvatarResponseDto convertToAvatarResponseDto(UserImage userImage) {
-            return AvatarResponseDto.builder()
+            var a = AvatarResponseDto.builder()
                     .imageId(userImage.getImageId())
                     .imageSrc(userImage.getSrc())
                     .build();
+            return a;
         }
 
     }
