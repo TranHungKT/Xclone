@@ -16,6 +16,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,6 +32,7 @@ import java.util.UUID;
 @Table(name = EntityHelper.TWEET_TABLE)
 @SuperBuilder(toBuilder = true)
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 public class Tweet extends BaseEntity {
@@ -45,23 +48,14 @@ public class Tweet extends BaseEntity {
     @JoinColumn(name = User_.USER_ID)
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = EntityHelper.TWEET_LIKES_TABLE,
-            joinColumns = @JoinColumn(name = Tweet_.TWEET_ID),
-            inverseJoinColumns = @JoinColumn(name = User_.USER_ID)
-    )
-    private List<User> likes;
+    @ManyToMany(mappedBy = User_.LIKED_TWEETS)
+    private Set<User> likes;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = EntityHelper.RETWEETS_TABLE,
-            joinColumns = @JoinColumn(name = Tweet_.TWEET_ID),
-            inverseJoinColumns = @JoinColumn(name = User_.USER_ID)
-            )
-    private List<User> retweets;
+    @ManyToMany(mappedBy = User_.RETWEETS)
+    private Set<User> retweets;
 
     @OneToMany(mappedBy = TweetImage_.TWEET, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @EqualsAndHashCode.Exclude
     private Set<TweetImage> tweetImages = new HashSet<>();
 
     public static Tweet from(CreateTweetRequest request, User user) {

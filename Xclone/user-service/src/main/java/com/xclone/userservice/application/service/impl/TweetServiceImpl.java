@@ -71,27 +71,24 @@ public class TweetServiceImpl implements TweetService {
         var userId = UserServiceImpl.getUser().getUserId();
         var user = userRepository.findByUserId(userId).orElseThrow(() -> ErrorHelper.buildBadRequestException("userId", "User do not exist"));
         var tweet = tweetRepository.findByTweetId(id).orElseThrow(() -> ErrorHelper.buildBadRequestException("tweetId", "Tweet do not exist"));
-        var likedUsers = tweet.getLikes();
 
-        if (Objects.equals(request.getReactType(), ReactTweetType.LIKE.getValue())
-                && (ObjectUtils.isEmpty(likedUsers) || !likedUsers.contains(user))) {
-            likedUsers.add(user);
+        if (Objects.equals(request.getReactType(), ReactTweetType.LIKE.getValue())) {
+            user.getLikedTweets().add(tweet);
         } else if (Objects.equals(request.getReactType(), ReactTweetType.DISLIKE.getValue())) {
-            likedUsers.remove(user);
+            user.getLikedTweets().remove(tweet);
         }
-        tweetRepository.save(tweet);
+        userRepository.save(user);
     }
 
     @Override
+    @Transactional
     public void retweet(UUID id) {
         var tweet = tweetRepository.findByTweetId(id).orElseThrow(() -> ErrorHelper.buildBadRequestException("tweetId", "Tweet do not exist"));
-        var user = UserServiceImpl.getUser();
 
-        var retweets = tweet.getRetweets();
-
-        if (!retweets.contains(user)) {
-            retweets.add(user);
-        }
-        tweetRepository.save(tweet);
+        var userId = UserServiceImpl.getUser().getUserId();
+        var currentUser = userRepository.findByUserId(userId).orElseThrow(() -> ErrorHelper.buildBadRequestException("userId", "User do not exist"));
+        var retweetedByUser = currentUser.getRetweets();
+        retweetedByUser.add(tweet);
+        userRepository.save(currentUser);
     }
 }

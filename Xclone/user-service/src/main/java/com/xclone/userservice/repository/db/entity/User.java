@@ -29,6 +29,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -69,12 +70,22 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = Tweet_.USER, cascade = CascadeType.ALL)
     private List<Tweet> tweets = List.of();
 
-    @ManyToMany(mappedBy = Tweet_.LIKES, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = EntityHelper.TWEET_LIKES_TABLE,
+            joinColumns = @JoinColumn(name = User_.USER_ID),
+            inverseJoinColumns = @JoinColumn(name = Tweet_.TWEET_ID)
+    )
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Tweet> likedTweets;
 
-    @ManyToMany(mappedBy = Tweet_.RETWEETS, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = EntityHelper.RETWEETS_TABLE,
+            joinColumns = @JoinColumn(name = User_.USER_ID),
+            inverseJoinColumns = @JoinColumn(name = Tweet_.TWEET_ID)
+    )
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Set<Tweet> retweets;
