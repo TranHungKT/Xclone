@@ -29,7 +29,6 @@ import java.util.UUID;
 @SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@IdClass(UserImage.class)
 public class UserImage extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -39,7 +38,6 @@ public class UserImage extends BaseEntity {
     @NotNull
     private String src;
 
-    @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = User_.USER_ID)
     @EqualsAndHashCode.Exclude
