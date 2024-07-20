@@ -46,12 +46,15 @@ public class Tweet extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = User_.USER_ID)
+    @EqualsAndHashCode.Exclude
     private User user;
 
     @ManyToMany(mappedBy = User_.LIKED_TWEETS)
+    @EqualsAndHashCode.Exclude
     private Set<User> likes;
 
     @ManyToMany(mappedBy = User_.RETWEETS)
+    @EqualsAndHashCode.Exclude
     private Set<User> retweets;
 
     @OneToMany(mappedBy = TweetImage_.TWEET, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
