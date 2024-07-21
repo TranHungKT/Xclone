@@ -9,7 +9,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -22,9 +25,13 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -63,14 +70,38 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = Tweet_.USER, cascade = CascadeType.ALL)
     private List<Tweet> tweets = List.of();
 
-    @OneToOne(mappedBy = UserImage_.USER, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private UserImage userImage;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = EntityHelper.TWEET_LIKES_TABLE,
+            joinColumns = @JoinColumn(name = User_.USER_ID),
+            inverseJoinColumns = @JoinColumn(name = Tweet_.TWEET_ID)
+    )
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Tweet> likedTweets;
 
-    @ManyToMany(mappedBy = Tweet_.LIKES, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Tweet> likedTweets;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = EntityHelper.RETWEETS_TABLE,
+            joinColumns = @JoinColumn(name = User_.USER_ID),
+            inverseJoinColumns = @JoinColumn(name = Tweet_.TWEET_ID)
+    )
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Tweet> retweets;
 
-    @ManyToMany(mappedBy = Tweet_.RETWEETS, fetch = FetchType.LAZY)
-    private List<Tweet> retweets;
+    @ManyToMany(mappedBy = User_.FOLLOWERS, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<User> following;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JoinTable(name = EntityHelper.USER_SUBSCRIPTIONS,
+            joinColumns = @JoinColumn(name = User_.USER_ID),
+            inverseJoinColumns = @JoinColumn(name = "subscriber_id"))
+    private Set<User> followers;
 
     public static User from(@NonNull RegistrationRequest request, PasswordEncoder passwordEncoder) {
         return User.builder()
