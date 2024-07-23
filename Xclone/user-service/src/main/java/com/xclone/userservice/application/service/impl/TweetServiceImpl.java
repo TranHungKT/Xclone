@@ -16,8 +16,8 @@ import com.xclone.userservice.responseDto.TweetResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -47,16 +47,16 @@ public class TweetServiceImpl implements TweetService {
         Tweet tweet = Tweet.from(request, UserServiceImpl.getUser());
         images.forEach(image -> image.setTweet(tweet));
 
-        extractAndSaveHashtag(tweet);
+        extractAndSetHashtagToTweet(tweet);
 
         tweetRepository.save(tweet);
     }
 
-    private void extractAndSaveHashtag(Tweet tweet) {
+    private void extractAndSetHashtagToTweet(Tweet tweet) {
         var hashtags = StringHelper.extractHashtags(tweet.getText());
         var existingHashtagsMap = tagRepository.findAllByTagNameIn(hashtags).stream().collect(Collectors.toMap(Tag::getTagName, Function.identity()));
-        var hashtagsForSaving = hashtags.stream().map(hashtag -> increaseQuantityOrCreateNewHashTag(hashtag, existingHashtagsMap, tweet)).toList();
-        tagRepository.saveAll(hashtagsForSaving);
+        var hashtagsForSaving = hashtags.stream().map(hashtag -> increaseQuantityOrCreateNewHashTag(hashtag, existingHashtagsMap, tweet)).collect(Collectors.toSet());
+        tweet.setTags(hashtagsForSaving);
     }
 
     private Tag increaseQuantityOrCreateNewHashTag(String hashTag, Map<String, Tag> existingHashtagsMap, Tweet tweet) {
@@ -79,6 +79,19 @@ public class TweetServiceImpl implements TweetService {
         List<Tweet> tweets = tweetRepository.findAllByUser(UserServiceImpl.getUser());
 
         return tweets.stream().map(TweetResponseDto::convertToTweetResponseDto).toList();
+    }
+
+    @Override
+    public List<TweetResponseDto> getTweetsByTagName(String tagName) {
+        var tags = tagRepository.findAllByTagName(tagName);
+        var tagTweets = tags.stream()
+                .map(Tag::getTweets).toList();
+
+        return tagTweets
+                .stream()
+                .flatMap(Collection::stream)
+                .map(TweetResponseDto::convertToTweetResponseDto)
+                .toList();
     }
 
     @Override

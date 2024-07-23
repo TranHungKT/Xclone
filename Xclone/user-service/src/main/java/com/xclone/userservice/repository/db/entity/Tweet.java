@@ -67,7 +67,8 @@ public class Tweet extends BaseEntity {
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = EntityHelper.TWEET_TAG_TABLE,
-            joinColumns = @JoinColumn(name = Tweet_.TWEET_ID)
+            joinColumns = @JoinColumn(name = Tweet_.TWEET_ID),
+            inverseJoinColumns = @JoinColumn(name = Tag_.TAG_ID)
     )
     private Set<Tag> tags;
 
