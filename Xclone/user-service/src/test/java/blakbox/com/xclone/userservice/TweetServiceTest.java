@@ -3,13 +3,17 @@ package blakbox.com.xclone.userservice;
 import blakbox.com.xclone.userservice.common.CommonTestData;
 import blakbox.com.xclone.userservice.common.TestBase;
 import com.xclone.userservice.common.ErrorHelper;
+import com.xclone.userservice.common.Util.StringHelper;
+import com.xclone.userservice.repository.db.dao.TagRepository;
 import com.xclone.userservice.repository.db.dao.TweetImageRepository;
 import com.xclone.userservice.repository.db.dao.TweetRepository;
+import com.xclone.userservice.repository.db.entity.Tag;
 import com.xclone.userservice.repository.db.entity.Tweet;
 import com.xclone.userservice.repository.db.entity.User;
 import jakarta.transaction.Transactional;
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
@@ -20,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,6 +37,8 @@ public class TweetServiceTest extends TestBase {
     @Autowired
     private TweetRepository tweetRepository;
 
+    @Autowired
+    private TagRepository tagRepository;
     @BeforeEach
     void setUp() throws SQLException, IOException {
         runScriptFromResource("blackbox/tweet.sql");
@@ -81,6 +88,12 @@ public class TweetServiceTest extends TestBase {
                 .extract()
                 .body()
                 .asString();
+
+        var hashtags = StringHelper.extractHashtags("Tweet #firstTweet #secondTag");
+        var existingHashtags = tagRepository.findAllByTagNameIn(hashtags).stream().collect(Collectors.toMap(Tag::getTagName, Tag::getTweetsQuantity));
+        Assertions.assertEquals(existingHashtags.get("firstTweet"), 1);
+        Assertions.assertEquals(existingHashtags.get("secondTag"), 2);
+
     }
 
     @ParameterizedTest
