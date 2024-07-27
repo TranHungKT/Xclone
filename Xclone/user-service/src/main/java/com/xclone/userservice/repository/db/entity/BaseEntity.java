@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,11 +26,13 @@ public class BaseEntity implements Serializable {
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
     private LocalDateTime createdDt;
 
     @Length(max = 50)
     private String updatedBy;
 
     @UpdateTimestamp
+    @EqualsAndHashCode.Exclude
     private LocalDateTime updatedDt;
 }

@@ -1,7 +1,6 @@
 package com.xclone.userservice.configuration.security;
 
 import com.xclone.userservice.repository.db.entity.User;
-import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

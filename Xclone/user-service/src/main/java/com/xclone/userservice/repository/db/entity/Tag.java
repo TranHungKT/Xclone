@@ -21,7 +21,7 @@ import java.util.UUID;
 @SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class Tag extends BaseEntity{
+public class Tag extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID tagId;

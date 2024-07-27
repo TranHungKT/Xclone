@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 @UtilityClass
 public class StringHelper {
     private static final String HASHTAG_PATTERN = "#(\\w+)";
-    private static final Pattern pattern = Pattern.compile(HASHTAG_PATTERN);
 
     public static List<String> extractHashtags(String text) {
         List<String> hashtags = new ArrayList<>();

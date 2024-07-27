@@ -1,13 +1,10 @@
 package com.xclone.userservice.controller;
 
-import com.xclone.userservice.application.service.TagService;
 import com.xclone.userservice.application.service.TweetService;
 import com.xclone.userservice.requestDto.CreateTweetRequest;
 import com.xclone.userservice.requestDto.ReactTweetRequest;
-import com.xclone.userservice.requestDto.TagRequest;
 import com.xclone.userservice.responseDto.TweetResponseDto;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

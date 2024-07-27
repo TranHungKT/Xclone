@@ -12,7 +12,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -71,7 +70,7 @@ public class UserDetailsResponseDto {
                 .confirmed(user.isConfirmed())
                 .updatedDt(user.getUpdatedDt())
                 .updatedBy(user.getUpdatedBy())
-                .avatar(Objects.isNull(userImage) ? null : AvatarResponseDto.convertToAvatarResponseDto(userImage) )
+                .avatar(Objects.isNull(userImage) ? null : AvatarResponseDto.convertToAvatarResponseDto(userImage))
                 .build();
     }
 

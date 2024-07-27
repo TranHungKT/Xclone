@@ -10,6 +10,7 @@ public class CommonTestData {
     public static final Integer PORT = 8080;
     public static final String GET_USER_DETAILS = "/api/v1/users/%s";
     public static final String TWEET = "/api/v1/tweets";
+    public static final String GET_TWEET_BY_TAG_NAME = "/api/v1/tweets/tags?tagName=%s";
     public static final String REACT_TWEET = "/api/v1/tweets/react/%s";
     public static final String UPDATE_FOLLOWING_STATUS = "/api/v1/users/follow-action/%s";
     public static final String TWEET_BY_ID = "/api/v1/tweets/%s";

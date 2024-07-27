@@ -37,6 +37,6 @@ INSERT INTO tags (tag_id, created_by, created_dt, updated_by, updated_dt, tag_na
 VALUES ('74769fb5-d3eb-451e-9d2f-6c38b5163463', '96751bae-00d0-4b73-b59f-4ffa8112e04c', '2024-04-21 13:20:37.000000',
         null, null, 'secondTag', 1);
 
-INSERT INTO tweet_tag (tweet_id, tags_tag_id)
+INSERT INTO tweet_tag (tweet_id, tag_id)
 VALUES ('7645ebd0-6d94-4d72-94f3-2ef86dc2c48d', '74769fb5-d3eb-451e-9d2f-6c38b5163463');
 
