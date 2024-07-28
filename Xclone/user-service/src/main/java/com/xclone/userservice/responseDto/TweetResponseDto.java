@@ -44,6 +44,14 @@ public class TweetResponseDto {
                 .build();
     }
 
+    public static TweetResponseDto convertToTweetResponseDtoWithoutImage(Tweet response) {
+        return TweetResponseDto.builder()
+                .id(response.getTweetId())
+                .text(response.getText())
+                .date(Optional.ofNullable(response.getUpdatedDt()).orElse(response.getCreatedDt()))
+                .build();
+    }
+
     @Getter
     @Setter
     @NoArgsConstructor

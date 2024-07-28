@@ -10,6 +10,8 @@ import java.util.UUID;
 public interface TweetService {
     void createTweet(CreateTweetRequest request);
     List<TweetResponseDto> getTweets();
+    List<TweetResponseDto> getTweetsByTagName(String tagName);
+
     TweetResponseDto getTweetDetails(UUID id);
     void deleteTweet(UUID id);
     void reactTweet(UUID id, ReactTweetRequest request);

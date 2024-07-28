@@ -1,6 +1,5 @@
 package com.xclone.userservice.repository.db.dao;
 
-import com.xclone.userservice.repository.db.entity.User;
 import com.xclone.userservice.repository.db.entity.UserImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

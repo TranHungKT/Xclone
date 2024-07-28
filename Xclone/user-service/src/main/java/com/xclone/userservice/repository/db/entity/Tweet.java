@@ -16,15 +16,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -60,6 +59,16 @@ public class Tweet extends BaseEntity {
     @OneToMany(mappedBy = TweetImage_.TWEET, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @EqualsAndHashCode.Exclude
     private Set<TweetImage> tweetImages = new HashSet<>();
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(
+            name = EntityHelper.TWEET_TAG_TABLE,
+            joinColumns = @JoinColumn(name = Tweet_.TWEET_ID),
+            inverseJoinColumns = @JoinColumn(name = Tag_.TAG_ID)
+    )
+    private Set<Tag> tags;
 
     public static Tweet from(CreateTweetRequest request, User user) {
         return Tweet.builder()

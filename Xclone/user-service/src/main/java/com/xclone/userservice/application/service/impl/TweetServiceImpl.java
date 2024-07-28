@@ -3,9 +3,12 @@ package com.xclone.userservice.application.service.impl;
 import com.xclone.userservice.application.service.TweetService;
 import com.xclone.userservice.common.Enum.ReactTweetType;
 import com.xclone.userservice.common.ErrorHelper;
+import com.xclone.userservice.common.Util.StringHelper;
+import com.xclone.userservice.repository.db.dao.TagRepository;
 import com.xclone.userservice.repository.db.dao.TweetImageRepository;
 import com.xclone.userservice.repository.db.dao.TweetRepository;
 import com.xclone.userservice.repository.db.dao.UserRepository;
+import com.xclone.userservice.repository.db.entity.Tag;
 import com.xclone.userservice.repository.db.entity.Tweet;
 import com.xclone.userservice.requestDto.CreateTweetRequest;
 import com.xclone.userservice.requestDto.ReactTweetRequest;
@@ -16,8 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +33,7 @@ public class TweetServiceImpl implements TweetService {
     private final TweetRepository tweetRepository;
     private final UserRepository userRepository;
     private final TweetImageRepository tweetImageRepository;
+    private final TagRepository tagRepository;
 
     @Override
     public void createTweet(CreateTweetRequest request) {
@@ -38,7 +46,36 @@ public class TweetServiceImpl implements TweetService {
 
         Tweet tweet = Tweet.from(request, UserServiceImpl.getUser());
         images.forEach(image -> image.setTweet(tweet));
+
+        extractAndSetHashtagToTweet(tweet);
+
         tweetRepository.save(tweet);
+    }
+
+    private void extractAndSetHashtagToTweet(Tweet tweet) {
+        var hashtags = StringHelper.extractHashtags(tweet.getText());
+        if (ObjectUtils.isEmpty(hashtags)) {
+            return;
+        }
+
+        var existingHashtagsMap = tagRepository.findAllByTagNameIn(hashtags).stream().collect(Collectors.toMap(Tag::getTagName, Function.identity(), (o1, o2) -> o2));
+        var hashtagsForSaving = hashtags.stream().map(hashtag -> increaseQuantityOrCreateNewHashTag(hashtag, existingHashtagsMap, tweet)).collect(Collectors.toSet());
+        tweet.setTags(hashtagsForSaving);
+    }
+
+    private Tag increaseQuantityOrCreateNewHashTag(String hashTag, Map<String, Tag> existingHashtagsMap, Tweet tweet) {
+        if (Objects.nonNull(existingHashtagsMap.get(hashTag))) {
+            var existingHashtag = existingHashtagsMap.get(hashTag);
+            existingHashtag.setTweetsQuantity(existingHashtag.getTweetsQuantity() + 1);
+            return existingHashtag;
+        }
+
+        return Tag.builder()
+                .tagName(hashTag)
+                .tweetsQuantity(1L)
+                .tweets(Set.of(tweet))
+                .createdBy(UserServiceImpl.getUser().getUserId().toString())
+                .build();
     }
 
     @Override
@@ -46,6 +83,17 @@ public class TweetServiceImpl implements TweetService {
         List<Tweet> tweets = tweetRepository.findAllByUser(UserServiceImpl.getUser());
 
         return tweets.stream().map(TweetResponseDto::convertToTweetResponseDto).toList();
+    }
+
+    @Override
+    public List<TweetResponseDto> getTweetsByTagName(String tagName) {
+        var tag = tagRepository.findByTagName(tagName);
+        var tagTweets = tag.getTweets().stream().toList();
+
+        return tagTweets
+                .stream()
+                .map(TweetResponseDto::convertToTweetResponseDtoWithoutImage)
+                .toList();
     }
 
     @Override
