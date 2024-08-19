@@ -83,6 +83,38 @@ public class UserServiceTest extends TestBase {
 
     @ParameterizedTest
     @CsvSource(value = {
+            "566abbd2-1d35-4d52-bd44-2ea3820fed56|followers"
+    }, delimiter = '|')
+    void givenUserId_getFollowers_returnExpected(String userId, String responseFile) throws IOException, JSONException {
+        var actualResponse = getFollowers(userId, token).then().log()
+                .body()
+                .statusCode(HttpStatus.SC_OK)
+                .extract()
+                .body()
+                .asString();
+
+        String expectedResponse = readJsonContentFromResource(CommonTestData.GET_USER_DETAILS_RESPONSE + responseFile);
+        assertEquals(expectedResponse, actualResponse, JSONCompareMode.STRICT);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "96751bae-00d0-4b73-b59f-4ffa8112e04c|followings"
+    }, delimiter = '|')
+    void givenUserId_getFollowings_returnExpected(String userId, String responseFile) throws IOException, JSONException {
+        var actualResponse = getFollowings(userId, token).then().log()
+                .body()
+                .statusCode(HttpStatus.SC_OK)
+                .extract()
+                .body()
+                .asString();
+
+        String expectedResponse = readJsonContentFromResource(CommonTestData.GET_USER_DETAILS_RESPONSE + responseFile);
+        assertEquals(expectedResponse, actualResponse, JSONCompareMode.STRICT);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
             "54a007cf-4ade-4a63-8380-1e4f9a14f5e0|follow_user|following_user_data",
             "54a007cf-4ade-4a63-8380-1e4f9a14f5e0|unfollow_user|unfollowing_user_data",
     }, delimiter = '|')

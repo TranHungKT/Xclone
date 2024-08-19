@@ -88,6 +88,23 @@ public class TestBase {
         return RestAssured.given().spec(specification).get(String.format(CommonTestData.GET_USER_DETAILS, userId));
     }
 
+    protected Response getFollowers(String userId, String token) throws IOException {
+        var headers = new HashMap<String, String>();
+        headers.put("Authorization", "Bearer " + token);
+        RequestSpecification specification = getSpecificationBuilder(headers).build();
+
+        return RestAssured.given().spec(specification).get(String.format(CommonTestData.GET_FOLLOWERS, userId));
+    }
+
+    protected Response getFollowings(String userId, String token) throws IOException {
+        var headers = new HashMap<String, String>();
+        headers.put("Authorization", "Bearer " + token);
+        RequestSpecification specification = getSpecificationBuilder(headers).build();
+
+        return RestAssured.given().spec(specification).get(String.format(CommonTestData.GET_FOLLOWINGS, userId));
+    }
+
+
     protected Response createTweet(String reqBodyFile, String token) throws IOException {
         var headers = new HashMap<String, String>();
         headers.put("Authorization", "Bearer " + token);

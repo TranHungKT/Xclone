@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -47,5 +48,19 @@ public class UserController {
     ) {
         userService.updateFollowingUserStatus(id, request);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("{id}/followers")
+    public ResponseEntity<List<UserDetailsResponseDto>> getUserFollowers(
+            @PathVariable @Valid final UUID id
+    ) {
+        return new ResponseEntity<>(userService.getUserFollowers(id), HttpStatus.OK);
+    }
+
+    @GetMapping("{id}/followings")
+    public ResponseEntity<List<UserDetailsResponseDto>> getUserFollowing(
+            @PathVariable @Valid final UUID id
+    ) {
+        return new ResponseEntity<>(userService.getUserFollowings(id), HttpStatus.OK);
     }
 }
