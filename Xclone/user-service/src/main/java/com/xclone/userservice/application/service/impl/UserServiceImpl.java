@@ -3,6 +3,7 @@ package com.xclone.userservice.application.service.impl;
 import com.xclone.userservice.application.service.UserService;
 import com.xclone.userservice.common.Enum.FollowingUserAction;
 import com.xclone.userservice.common.ErrorHelper;
+import com.xclone.userservice.common.Model.UserImageWithUserId;
 import com.xclone.userservice.configuration.security.SecurityUserDetails;
 import com.xclone.userservice.repository.db.dao.UserImageRepository;
 import com.xclone.userservice.repository.db.dao.UserRepository;
@@ -14,7 +15,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -76,6 +79,38 @@ public class UserServiceImpl implements UserService {
         }
 
         userRepository.save(userToUpdateFollowingStatus);
+    }
+
+    @Override
+    public List<UserDetailsResponseDto> getUserFollowers(UUID userId) {
+        var user = userRepository.findByUserId(userId).orElseThrow(() -> ErrorHelper.buildBadRequestException("userId", "user not exist"));
+
+        var followers = user.getFollowers();
+        if (ObjectUtils.isEmpty(followers)) {
+            return List.of();
+        }
+        return getUsersDetails(followers);
+    }
+
+    @Override
+    public List<UserDetailsResponseDto> getUserFollowings(UUID userId) {
+        var user = userRepository.findByUserId(userId).orElseThrow(() -> ErrorHelper.buildBadRequestException("userId", "user not exist"));
+
+        var followings = user.getFollowing();
+        if (ObjectUtils.isEmpty(followings)) {
+            return List.of();
+        }
+        return getUsersDetails(followings);
+    }
+
+    private List<UserDetailsResponseDto> getUsersDetails(Set<User> users) {
+        var userIds = users.stream().map(User::getUserId).toList();
+        var userImagesMap = userImageRepository.findByUserIdIn(userIds).stream().collect(Collectors.toMap(UserImageWithUserId::userId, Function.identity(), ((o1, o2) -> o2)));
+
+        return users.stream()
+                .map(follower ->
+                        UserDetailsResponseDto.convertToUserDetails(follower, userImagesMap.getOrDefault(follower.getUserId(), null))
+                ).toList();
     }
 
     public static User getUser() {

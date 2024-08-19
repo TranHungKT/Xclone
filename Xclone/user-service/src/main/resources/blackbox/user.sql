@@ -21,7 +21,11 @@ INSERT INTO user_image
 VALUES ('8443dd95-3401-44f8-a228-9049295b9d04', '96751bae-00d0-4b73-b59f-4ffa8112e04c', '2024-04-21 13:20:37.000000',
         'P123455', '2024-04-21 13:20:37.000000',
         'https://xclonebucket.s3.ap-southeast-2.amazonaws.com/adcc3424-eea0-477d-8a6a-f6944ecec9af_Screenshot%202024-06-16%20at%2021.53.31.png',
-        '96751bae-00d0-4b73-b59f-4ffa8112e04c');
+        '96751bae-00d0-4b73-b59f-4ffa8112e04c'),
+       ('f53603f9-d3df-4007-923d-ddc553204a59', '54a007cf-4ade-4a63-8380-1e4f9a14f5e0', '2024-04-21 13:20:37.000000',
+        'P123455', '2024-04-21 13:20:37.000000',
+        'https://xclonebucket.s3.ap-southeast-2.amazonaws.com/adcc3424-eea0-477d-8a6a-f6944ecec9af_Screenshot%202024-06-16%20at%2021.53.31.png',
+        '54a007cf-4ade-4a63-8380-1e4f9a14f5e0');
 
 INSERT INTO user_subscriptions
 (user_id, subscriber_id)

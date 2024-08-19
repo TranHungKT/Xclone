@@ -9,6 +9,9 @@ public class CommonTestData {
     public static final String BASE_URI ="http://localhost";
     public static final Integer PORT = 8080;
     public static final String GET_USER_DETAILS = "/api/v1/users/%s";
+    public static final String GET_FOLLOWERS = "/api/v1/users/%s/followers";
+    public static final String GET_FOLLOWINGS = "/api/v1/users/%s/followings";
+
     public static final String TWEET = "/api/v1/tweets";
     public static final String GET_TWEET_BY_TAG_NAME = "/api/v1/tweets/tags?tagName=%s";
     public static final String REACT_TWEET = "/api/v1/tweets/react/%s";

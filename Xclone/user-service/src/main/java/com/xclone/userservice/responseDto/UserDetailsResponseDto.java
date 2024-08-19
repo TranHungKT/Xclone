@@ -2,6 +2,7 @@ package com.xclone.userservice.responseDto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.xclone.userservice.common.Model.UserImageWithUserId;
 import com.xclone.userservice.repository.db.entity.User;
 import com.xclone.userservice.repository.db.entity.UserImage;
 import lombok.AllArgsConstructor;
@@ -74,6 +75,16 @@ public class UserDetailsResponseDto {
                 .build();
     }
 
+    public static UserDetailsResponseDto convertToUserDetails(User user, UserImageWithUserId userImage) {
+        return UserDetailsResponseDto.builder()
+                .id(user.getUserId())
+                .fullName(user.getFullName())
+                .username(user.getUsername())
+                .website(user.getWebsite())
+                .avatar(Objects.isNull(userImage) ? null : AvatarResponseDto.convertToAvatarResponseDto(UserImage.builder().imageId(userImage.imageId()).src(userImage.src()).build()))
+                .build();
+    }
+
     @Getter
     @Setter
     @NoArgsConstructor
@@ -88,11 +99,10 @@ public class UserDetailsResponseDto {
         private String imageSrc;
 
         public static AvatarResponseDto convertToAvatarResponseDto(UserImage userImage) {
-            var a = AvatarResponseDto.builder()
+            return AvatarResponseDto.builder()
                     .imageId(userImage.getImageId())
                     .imageSrc(userImage.getSrc())
                     .build();
-            return a;
         }
 
     }
