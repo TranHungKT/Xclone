@@ -24,6 +24,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -69,6 +70,12 @@ public class Tweet extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = Tag_.TAG_ID)
     )
     private Set<Tag> tags;
+
+    @ManyToMany
+    @JoinTable(name = Tweet_.REPLIES,
+            joinColumns = @JoinColumn(name = Tweet_.TWEET_ID),
+            inverseJoinColumns = @JoinColumn(name = "reply_id"))
+    private List<Tweet> replies;
 
     public static Tweet from(CreateTweetRequest request, User user) {
         return Tweet.builder()

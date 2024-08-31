@@ -43,6 +43,7 @@ public class TweetController {
     ) {
         return new ResponseEntity<>(tweetService.getTweetsByTagName(tagName), HttpStatus.OK);
     }
+
     @GetMapping("{id}")
     public ResponseEntity<TweetResponseDto> getTweetDetails(@PathVariable @Valid final UUID id) {
         return new ResponseEntity<>(tweetService.getTweetDetails(id), HttpStatus.OK);
@@ -51,6 +52,12 @@ public class TweetController {
     @PostMapping("react/{id}")
     public ResponseEntity<Void> reactTweet(@PathVariable @Valid final UUID id, @Valid @RequestBody ReactTweetRequest request) {
         tweetService.reactTweet(id, request);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/reply/{tweetId}")
+    public ResponseEntity<Void> replyTweet(@PathVariable @Valid final UUID tweetId, @Valid @RequestBody CreateTweetRequest request) {
+        tweetService.replyTweet(tweetId, request);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

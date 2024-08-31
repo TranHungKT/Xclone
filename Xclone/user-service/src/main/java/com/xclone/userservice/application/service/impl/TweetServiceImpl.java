@@ -36,7 +36,7 @@ public class TweetServiceImpl implements TweetService {
     private final TagRepository tagRepository;
 
     @Override
-    public void createTweet(CreateTweetRequest request) {
+    public Tweet createTweet(CreateTweetRequest request) {
         var images = tweetImageRepository.findAllByImageIdIn(request.getImageIds());
 
         var imagesWithTweetId = images.stream().filter(image -> !Objects.isNull(image.getTweet())).toList();
@@ -49,7 +49,7 @@ public class TweetServiceImpl implements TweetService {
 
         extractAndSetHashtagToTweet(tweet);
 
-        tweetRepository.save(tweet);
+        return tweetRepository.save(tweet);
     }
 
     private void extractAndSetHashtagToTweet(Tweet tweet) {
@@ -67,6 +67,7 @@ public class TweetServiceImpl implements TweetService {
         if (Objects.nonNull(existingHashtagsMap.get(hashTag))) {
             var existingHashtag = existingHashtagsMap.get(hashTag);
             existingHashtag.setTweetsQuantity(existingHashtag.getTweetsQuantity() + 1);
+            existingHashtag.getTweets().add(tweet);
             return existingHashtag;
         }
 
@@ -138,5 +139,13 @@ public class TweetServiceImpl implements TweetService {
         var retweetedByUser = currentUser.getRetweets();
         retweetedByUser.add(tweet);
         userRepository.save(currentUser);
+    }
+
+    @Override
+    public void replyTweet(UUID id, CreateTweetRequest request) {
+        var tweet = tweetRepository.findByTweetId(id).orElseThrow(() -> ErrorHelper.buildBadRequestException("tweetId", "Tweet do not exist"));
+        var reply = createTweet(request);
+        tweet.getReplies().add(reply);
+        tweetRepository.save(tweet);
     }
 }
