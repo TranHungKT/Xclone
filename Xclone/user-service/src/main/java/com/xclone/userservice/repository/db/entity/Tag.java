@@ -1,5 +1,6 @@
 package com.xclone.userservice.repository.db.entity;
 
+import com.xclone.userservice.application.service.impl.UserServiceImpl;
 import com.xclone.userservice.repository.db.helper.EntityHelper;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,7 +24,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Tag extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID tagId;
 
     private String tagName;
@@ -32,4 +32,14 @@ public class Tag extends BaseEntity {
     @ManyToMany(mappedBy = Tweet_.TAGS)
     @EqualsAndHashCode.Exclude
     private Set<Tweet> tweets;
+
+    public static Tag from(String tagName, Tweet tweet, String createdBy) {
+        return Tag.builder()
+                .tagId(UUID.randomUUID())
+                .tagName(tagName)
+                .tweetsQuantity(1L)
+                .tweets(Set.of(tweet))
+                .createdBy(createdBy)
+                .build();
+    }
 }

@@ -27,7 +27,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class TweetImage extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID imageId;
 
     @Column
@@ -40,6 +39,7 @@ public class TweetImage extends BaseEntity {
 
     public static TweetImage from(@NonNull String imageSrc, User user) {
         return TweetImage.builder()
+                .imageId(UUID.randomUUID())
                 .src(imageSrc)
                 .createdBy(user.getUserId().toString())
                 .build();

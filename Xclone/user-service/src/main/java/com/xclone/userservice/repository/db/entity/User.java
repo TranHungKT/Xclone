@@ -37,7 +37,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class User extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID userId;
 
     @Column(unique = true, name = "email")
@@ -100,6 +99,7 @@ public class User extends BaseEntity {
 
     public static User from(@NonNull RegistrationRequest request, PasswordEncoder passwordEncoder) {
         return User.builder()
+                .userId(UUID.randomUUID())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .createdBy(request.getFullName())

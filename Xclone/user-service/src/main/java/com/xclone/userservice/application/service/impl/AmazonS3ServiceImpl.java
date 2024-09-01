@@ -60,8 +60,6 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
                         .id(savedTweetImage.getImageId())
                         .src(savedTweetImage.getSrc())
                         .build());
-
-
     }
 
     private String getFileUrl(String keyName) {

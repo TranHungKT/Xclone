@@ -27,9 +27,9 @@ public class TweetController {
     private final TweetService tweetService;
 
     @PostMapping()
-    public ResponseEntity<Void> createTweet(@Valid @RequestBody CreateTweetRequest request) {
-        tweetService.createTweet(request);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<TweetResponseDto> createTweet(@Valid @RequestBody CreateTweetRequest request) {
+        var tweet = tweetService.createTweet(request);
+        return new ResponseEntity<>(TweetResponseDto.convertToTweetResponseDto(tweet), HttpStatus.OK);
     }
 
     @GetMapping()

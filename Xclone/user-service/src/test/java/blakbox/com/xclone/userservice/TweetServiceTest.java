@@ -81,7 +81,7 @@ public class TweetServiceTest extends TestBase {
     void givenCreateTweetBody_returnExcepted(String reqBodyFile) throws IOException {
         createTweet(reqBodyFile, token).then().log()
                 .body()
-                .statusCode(HttpStatus.SC_NO_CONTENT)
+                .statusCode(HttpStatus.SC_OK)
                 .extract()
                 .body()
                 .asString();

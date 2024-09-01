@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface TweetRepository extends JpaRepository<Tweet, UUID> {
+public interface TweetRepository extends JpaRepository<Tweet, UUID>, PersistAllRepository<Tweet> {
     List<Tweet> findAllByUser(User user);
 
     Optional<Tweet> findByTweetIdAndUser(UUID id, User user);

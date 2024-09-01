@@ -49,7 +49,7 @@ public class TweetServiceImpl implements TweetService {
 
         extractAndSetHashtagToTweet(tweet);
 
-        return tweetRepository.save(tweet);
+        return tweetRepository.persist(tweet);
     }
 
     private void extractAndSetHashtagToTweet(Tweet tweet) {
@@ -67,16 +67,10 @@ public class TweetServiceImpl implements TweetService {
         if (Objects.nonNull(existingHashtagsMap.get(hashTag))) {
             var existingHashtag = existingHashtagsMap.get(hashTag);
             existingHashtag.setTweetsQuantity(existingHashtag.getTweetsQuantity() + 1);
-            existingHashtag.getTweets().add(tweet);
             return existingHashtag;
         }
 
-        return Tag.builder()
-                .tagName(hashTag)
-                .tweetsQuantity(1L)
-                .tweets(Set.of(tweet))
-                .createdBy(UserServiceImpl.getUser().getUserId().toString())
-                .build();
+        return Tag.from(hashTag, tweet, UserServiceImpl.getUser().getUserId().toString());
     }
 
     @Override

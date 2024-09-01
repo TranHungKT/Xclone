@@ -28,7 +28,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class UserImage extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID imageId;
 
     @Column
@@ -43,6 +42,7 @@ public class UserImage extends BaseEntity {
 
     public static UserImage from(@NonNull String imageSrc, User user) {
         return UserImage.builder()
+                .imageId(UUID.randomUUID())
                 .src(imageSrc)
                 .createdBy(user.getUserId().toString())
                 .build();

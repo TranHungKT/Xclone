@@ -37,7 +37,6 @@ import java.util.UUID;
 @Setter
 public class Tweet extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID tweetId;
 
     @Column
@@ -79,6 +78,7 @@ public class Tweet extends BaseEntity {
 
     public static Tweet from(CreateTweetRequest request, User user) {
         return Tweet.builder()
+                .tweetId(UUID.randomUUID())
                 .text(request.getText())
                 .user(user)
                 .createdBy(user.getUserId().toString())
