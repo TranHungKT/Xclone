@@ -15,7 +15,7 @@ public class SecurityUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) {
         var user = userRepository.findUserByEmail(email)
-                .orElseThrow(() -> ErrorHelper.buildBadCredentialsException("Email or password is wrong"));
+                .orElseThrow(() -> ErrorHelper.buildBadCredentialsException("Bad credentials"));
 
         return new SecurityUserDetails(user);
     }
